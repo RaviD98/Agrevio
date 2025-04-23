@@ -1,6 +1,7 @@
 # Node.js
 node_modules/
 .env
+server/.env
 dist/
 build/
 npm-debug.log*
