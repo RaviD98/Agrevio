@@ -15,9 +15,9 @@ logs
 log.txt
 
 # Optional:
-frontend/node_modules/
-frontend/dist/
-backend/node_modules/
+client/node_modules/
+client/dist/
+server/node_modules/
 dist-ssr
 *.local
 
