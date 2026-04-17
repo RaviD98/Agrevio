@@ -1,13 +1,15 @@
 import React from "react"; // Import the React object
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import Home from "./pages/Home.jsx";
+import { Provider } from "react-redux";
+import  store  from "./app/store";
+import { Toaster } from "./components/ui/sonner";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <Provider store={store}>
+    {/* Add Toaster here so it’s globally available */}
+    <Toaster richColors="top-right" />
     <App />
-    <Home/>
-  </StrictMode>
+  </Provider>
 );
