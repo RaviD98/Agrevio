@@ -1,30 +1,26 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.model.js";
+import { findUserById } from "../repositories/user.repository.js";
+import { ApiError } from "../utils/ApiError.js";
 
 const isAuthenticated = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    const token = req.cookies.accessToken;
 
     if (!token) {
-      const error = new Error("Not authenticated");
-      error.statusCode = 401;
-      throw error;
+      throw new ApiError(401, "Not authenticated");
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-    const user = await User.findById(decoded.userId).select("-password");
+    const user = await findUserById(decoded.userId);
 
     if (!user) {
-      const error = new Error("User not found");
-      error.statusCode = 401;
-      throw error;
+      throw new ApiError(401, "User not found");
     }
 
     req.user = user;
     next();
   } catch (error) {
-    error.statusCode = 401;
     next(error);
   }
 };

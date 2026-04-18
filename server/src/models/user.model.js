@@ -32,26 +32,26 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// 🔐 Hash password before save
+// Hash password before save
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-// 🔑 Compare password
+// Compare password
 userSchema.methods.comparePassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-// 🔑 Access token
+// Access token
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign({ userId: this._id }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "1d",
   });
 };
 
-// 🔑 Refresh token
+// Refresh token
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign({ userId: this._id }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
