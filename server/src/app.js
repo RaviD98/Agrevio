@@ -1,13 +1,14 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import cookieParser from "cookie-parser";
 import morgan from "morgan";
-
-import userRoutes from "./routes/userRoutes.js";
-import paymentRoutes from "./routes/paymentRoutes.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
+app.use(cookieParser());
+
+import userRoutes from "./routes/user.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
 
 // Security middlewares
 app.use(helmet());
@@ -17,9 +18,8 @@ app.use(morgan("dev"));
 
 // Body parser
 app.use(express.json());
-app.use(cookieParser());
 
-// CORS (env-based)
+// CORS
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
