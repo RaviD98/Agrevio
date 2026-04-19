@@ -1,18 +1,19 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-import { registerUser, loginUser } from "../services/auth.service.js";
+import { registerUser, loginUser, refreshAccessToken } from "../services/auth.service.js";
+import { findUserById } from "../repositories/user.repository.js";
 
 // Register
 export const register = asyncHandler(async (req, res) => {
-  const user = await registerUser(req.body);
+  const data = await registerUser(req.body);
 
   res.status(201).json(
     new ApiResponse(
       201,
       {
         user: {
-          id: data._id,
+          _id: data._id,
           name: data.name,
           email: data.email,
           role: data.role,
@@ -34,6 +35,8 @@ export const login = asyncHandler(async (req, res) => {
   user.refreshToken = refreshToken;
   await user.save({ validateBeforeSave: false });
 
+  const loggedInUser = await findUserById(user._id).select("-refreshToken");
+
   // Cookies
   const options = {
     httpOnly: true,
@@ -49,14 +52,11 @@ export const login = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         {
-          user: {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-          },
+          user: loggedInUser,
+          accessToken,
+          refreshToken,
         },
-        "Login successful",
+        "User logged in successfully",
       ),
     );
 });
@@ -73,4 +73,24 @@ export const logout = asyncHandler(async (req, res) => {
     .clearCookie("refreshToken")
     .status(200)
     .json(new ApiResponse(200, null, "Logged out successfully"));
+});
+
+export const refreshToken = asyncHandler(async (req, res) => {
+  const oldToken = req.cookies.refreshToken;
+
+  const { newAccessToken, newRefreshToken } =
+    await refreshAccessToken(oldToken);
+
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  };
+
+  res
+    .cookie("accessToken", newAccessToken, options)
+    .cookie("refreshToken", newRefreshToken, options)
+    .status(200)
+    .json(new ApiResponse(200, null, "Token refreshed"));
 });

@@ -9,6 +9,7 @@ app.use(cookieParser());
 
 import userRoutes from "./routes/user.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 // Security middlewares
 app.use(helmet());
@@ -28,6 +29,7 @@ app.use(
 );
 
 // Routes
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 

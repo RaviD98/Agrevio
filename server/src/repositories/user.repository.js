@@ -20,4 +20,8 @@ const saveUser = (user) => {
   return user.save({ validateBeforeSave: false });
 };
 
-export {findUserByEmail, findUserByEmailWithPassword, createUser, findUserById, saveUser};
+const findUserByRefreshToken = (token) => {
+  return User.findOne({ refreshToken: token });
+};
+
+export {findUserByEmail, findUserByEmailWithPassword, createUser, findUserById, saveUser, findUserByRefreshToken};

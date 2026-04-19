@@ -1,9 +1,11 @@
+import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/ApiError.js";
 import {
   findUserByEmail,
   findUserByEmailWithPassword,
   createUser,
   saveUser,
+  findUserByRefreshToken
 } from "../repositories/user.repository.js";
 
 export const registerUser = async ({ name, email, password }) => {
@@ -14,7 +16,7 @@ export const registerUser = async ({ name, email, password }) => {
   const existingUser = await findUserByEmail(email.toLowerCase());
 
   if (existingUser) {
-    throw new ApiError(400, "User already exists");
+    throw new ApiError(409, "User already exists");
   }
 
   const user = await createUser({
@@ -49,4 +51,40 @@ export const loginUser = async ({ email, password }) => {
 export const logoutUser = async (user) => {
   user.refreshToken = null;
   await saveUser(user);
+};
+
+export const refreshAccessToken = async (refreshToken) => {
+
+  if (!refreshToken) {
+    throw new ApiError(401, "Refresh token missing");
+  }
+
+  let decoded;
+
+  try {
+    decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  } catch (error) {
+    throw new ApiError(401, "Invalid or expired refresh token");
+  }
+
+  const user = await findUserByRefreshToken(refreshToken);
+
+  if (!user) {
+    throw new ApiError(401, "Refresh token not found");
+  }
+
+  if (user._id.toString() !== decoded.userId) {
+    throw new ApiError(401, "Invalid refresh token");
+  }
+
+  const newAccessToken = user.generateAccessToken();
+  const newRefreshToken = user.generateRefreshToken();
+
+  user.refreshToken = newRefreshToken;
+  await saveUser(user);
+
+  return {
+    newAccessToken,
+    newRefreshToken,
+  };
 };
