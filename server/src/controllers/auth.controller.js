@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-import { registerUser, loginUser } from "../services/auth.service.js";
+import { registerUser, loginUser, refreshAccessToken } from "../services/auth.service.js";
 import { findUserById } from "../repositories/user.repository.js";
 
 // Register
@@ -35,8 +35,7 @@ export const login = asyncHandler(async (req, res) => {
   user.refreshToken = refreshToken;
   await user.save({ validateBeforeSave: false });
 
-  const loggedInUser = await findUserById(user._id)
-  .select("-password -refreshToken");
+  const loggedInUser = await findUserById(user._id).select("-refreshToken");
 
   // Cookies
   const options = {
@@ -53,7 +52,9 @@ export const login = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         {
-          user: loggedInUser, accessToken, refreshToken,
+          user: loggedInUser,
+          accessToken,
+          refreshToken,
         },
         "User logged in successfully",
       ),
@@ -72,4 +73,24 @@ export const logout = asyncHandler(async (req, res) => {
     .clearCookie("refreshToken")
     .status(200)
     .json(new ApiResponse(200, null, "Logged out successfully"));
+});
+
+export const refreshToken = asyncHandler(async (req, res) => {
+  const oldToken = req.cookies.refreshToken;
+
+  const { newAccessToken, newRefreshToken } =
+    await refreshAccessToken(oldToken);
+
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  };
+
+  res
+    .cookie("accessToken", newAccessToken, options)
+    .cookie("refreshToken", newRefreshToken, options)
+    .status(200)
+    .json(new ApiResponse(200, null, "Token refreshed"));
 });
