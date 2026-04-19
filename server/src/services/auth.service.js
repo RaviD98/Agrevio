@@ -14,7 +14,7 @@ export const registerUser = async ({ name, email, password }) => {
   const existingUser = await findUserByEmail(email.toLowerCase());
 
   if (existingUser) {
-    throw new ApiError(400, "User already exists");
+    throw new ApiError(409, "User already exists");
   }
 
   const user = await createUser({
