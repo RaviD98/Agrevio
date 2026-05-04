@@ -3,10 +3,8 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useSelector((state) => state.auth);
-console.log("Redux user ↩️", user);
 
-
-  if (!user) {
+  if (user === null) {
     return <Navigate to="/login" replace />;
   }
 

@@ -1,4 +1,3 @@
-// src/components/ThemeHandler.jsx
 import { useEffect, useState } from "react";
 
 const ThemeHandler = () => {
@@ -17,7 +16,6 @@ const ThemeHandler = () => {
     }
   }, [darkMode]);
 
-  // You can expose setDarkMode via context if you want toggle button elsewhere
   return null;
 };
 

@@ -8,7 +8,6 @@ export function ThemeProvider({ children, ...props }) {
     setMounted(true);
   }, []);
 
-  // Prevents mismatches on hydration
   if (!mounted) return null;
 
   return (
