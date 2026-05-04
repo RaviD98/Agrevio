@@ -21,11 +21,12 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // CORS
-app.use(cors({
-   origin: "http://localhost:5173",
-   methods: ["GET","POST","PUT","DELETE"],
-   credentials: true
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  }),
+);
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
