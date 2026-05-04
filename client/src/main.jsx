@@ -8,7 +8,6 @@ import { Toaster } from "./components/ui/sonner";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    {/* Add Toaster here so it’s globally available */}
     <Toaster richColors="top-right" />
     <App />
   </Provider>

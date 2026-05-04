@@ -41,12 +41,12 @@ const CheckoutButton = ({
 
     try {
       const res = await fetch(
-        "http://localhost:8080/api/payment/create-checkout-session",
+        "http://localhost:8080/api/v1/payments/checkout-session",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ line_items: lineItems }),
-        }
+        },
       );
 
       if (!res.ok) {

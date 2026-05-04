@@ -10,7 +10,7 @@ const ProductItemCard = ({ name, image, onClick }) => {
       <img
         src={image}
         alt={name}
-        className="h-48 w-full object-cover transition duration-300"
+        c lassName="h-48 w-full object-cover transition duration-300"
       />
       <CardContent className="p-4">
         <h3 className="text-xl font-semibold text-green-800 dark:text-green-300">

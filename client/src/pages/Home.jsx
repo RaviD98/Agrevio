@@ -13,7 +13,7 @@ import tomatoSeeds from "@/assets/tomato-seeds-img.jpeg"; // 🌾 NEW
 const images = [
   { src: wheat1, alt: "wheat image" },
   { src: nature1, alt: "nature image" },
-  { src: nature, alt: "nature image" },
+  { src: nature, alt: "natures image" },
 ];
 
 const HomePage = () => {

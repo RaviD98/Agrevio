@@ -5,7 +5,8 @@ import cartReducer from "@/features/cartSlice";
 import favouritesReducer from "@/features/favouritesSlice";
 
 /* ---------- hydrate user (already present) ---------- */
-const persistedUser = JSON.parse(localStorage.getItem("user") || "null");
+// const persistedUser = JSON.parse(localStorage.getItem("user") || "null");
+
 
 /* ---------- create store ---------- */
 export const store = configureStore({
@@ -15,9 +16,9 @@ export const store = configureStore({
     cart: cartReducer,
     favourites: favouritesReducer,
   },
-  preloadedState: {
-    auth: { user: persistedUser },
-  },
+  // preloadedState: {
+  //   auth: { user: persistedUser },
+  // },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(authApi.middleware),
 });

@@ -73,10 +73,10 @@ const Login = () => {
       toast.error(registerError?.data?.message || "Signup failed.");
     }
 
-    if (loginIsSuccess && loginData?.user) {
+    if (loginIsSuccess && loginData?.data?.user) {
       dispatch(userLoggedIn(loginData.user));
       toast.success(loginData.message || "Login successful.");
-      localStorage.setItem("user", JSON.stringify(loginData.user));
+      // localStorage.setItem("user", JSON.stringify(loginData.user));
       navigate("/");
     }
     if (loginError) {
