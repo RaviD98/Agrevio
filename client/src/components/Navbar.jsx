@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoggedOut } from "@/features/authSlice";
+import Profile from "@/pages/Profile";
 import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -29,7 +30,7 @@ const AgriNavbar = () => {
 
   // 1️⃣ Initialise state from the DOM, not localStorage
   const [darkMode, setDarkMode] = useState(() =>
-    document.documentElement.classList.contains("dark")
+    document.documentElement.classList.contains("dark"),
   );
 
   // 2️⃣ Toggle handler that keeps DOM + localStorage in sync
@@ -147,6 +148,9 @@ const AgriNavbar = () => {
                 className="z-[999] bg-white dark:bg-green-900 text-green-900 dark:text-white"
               >
                 <DropdownMenuLabel>Welcome, {user.name}</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => navigate("/profile")}>
+                  Profile
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate("/cart")}>
                   My Cart
