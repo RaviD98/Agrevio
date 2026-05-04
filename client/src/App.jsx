@@ -20,7 +20,7 @@ import ItemDetails from "./pages/ItemDetails";
 import Payment from "./pages/Payment";
 import PaymentSuccess from "./components/PaymentSuccess ";
 import PaymentCancelled from "./components/PaymentCancelled";
-
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -108,11 +108,19 @@ const router = createBrowserRouter(
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
       {/* auth & fallback */}
       <Route path="login" element={<Login />} />
       <Route path="*" element={<NotFound />} />
-    </Route>
-  )
+    </Route>,
+  ),
 );
 
 const App = () => <RouterProvider router={router} />;
