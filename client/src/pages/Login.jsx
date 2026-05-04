@@ -74,7 +74,7 @@ const Login = () => {
     }
 
     if (loginIsSuccess && loginData?.data?.user) {
-      dispatch(userLoggedIn(loginData.user));
+      dispatch(userLoggedIn(loginData.data.user));
       toast.success(loginData.message || "Login successful.");
       // localStorage.setItem("user", JSON.stringify(loginData.user));
       navigate("/");
