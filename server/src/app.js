@@ -10,7 +10,8 @@ app.use(cookieParser());
 import userRoutes from "./routes/user.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import authRoutes from "./routes/auth.routes.js";
-import favouritesRoutes from "./routes/favourites.routes.js";
+import favouriteRoutes from "./routes/favourite.routes.js";
+import productRoutes from "./routes/product.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 // Security middlewares
 app.use(helmet());
@@ -34,7 +35,9 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/cart", cartRoutes);
-app.use("/api/v1/favourites", favouritesRoutes);
+app.use("/api/v1/favourites", favouriteRoutes);
+app.use("/api/v1/products", productRoutes);
+
 // Health check
 app.get("/", (req, res) => {
   res.status(200).json({

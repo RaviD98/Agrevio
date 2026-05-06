@@ -7,6 +7,7 @@ const favouriteSchema = new mongoose.Schema(
       ref: "User",
       required: true,
       unique: true,
+      index: true,
     },
 
     products: [
@@ -16,7 +17,7 @@ const favouriteSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false },
 );
 
 export const Favourite = mongoose.model("Favourite", favouriteSchema);
