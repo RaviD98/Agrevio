@@ -32,12 +32,18 @@ export const authApi = createApi({
         }
       },
     }),
+    getMe: builder.query({
+      query: () => ({
+        url: "http://localhost:8080/api/v1/users/me",
+        method: "GET",
+      }),
+
+      providesTags: ["Auth"],
+    }),
   }),
 });
 export const {
   useRegisterUserMutation,
   useLoginUserMutation,
-  // useLogoutUserMutation,
-  // useLoadUserQuery,
-  // useUpdateUserMutation,
+  useGetMeQuery,
 } = authApi;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -23,6 +24,8 @@ import {
 } from "@/features/api/authApi";
 import { userLoggedIn } from "@/features/authSlice";
 
+
+
 const Login = () => {
   const [signupInput, setSignupInput] = useState({
     name: "",
@@ -33,6 +36,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   const [
     registerUser,
@@ -63,6 +67,12 @@ const Login = () => {
 
   const handleSignup = () => registerUser(signupInput);
   const handleLogin = () => loginUser(loginInput);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     if (registerIsSuccess && registerData) {

@@ -7,6 +7,7 @@ import {
   getProductByIdService,
   updateProductService,
   deleteProductService,
+  getMyProductsService,
 } from "../services/product.service.js";
 
 // Create product
@@ -73,3 +74,24 @@ export const deleteProductController = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, null, "Product deleted successfully"));
 });
+
+// Get my products
+export const getMyProductsController =
+  asyncHandler(
+    async (req, res) => {
+      const products =
+        await getMyProductsService(
+          req.user._id,
+        );
+
+      return res
+        .status(200)
+        .json(
+          new ApiResponse(
+            200,
+            products,
+            "Vendor products fetched successfully",
+          ),
+        );
+    },
+  );

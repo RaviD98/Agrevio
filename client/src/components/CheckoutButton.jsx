@@ -1,76 +1,95 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+
 import { Button } from "@/components/ui/button";
+
+import { useGetCartQuery } from "@/features/api/cartApi";
 
 const CheckoutButton = ({
   singleItem = null,
   label = "Checkout All Items",
 }) => {
-  const cartItems = useSelector((state) => state.cart.items);
-  const dispatch = useDispatch();
+  const { data } = useGetCartQuery();
+
+  const cartItems = data?.data?.items || [];
 
   const getLineItems = () => {
+    // Single product checkout
     if (singleItem) {
-      // Single item purchase, ignore cart completely
       return [
         {
           price_data: {
             currency: "inr",
-            product_data: { name: singleItem.name },
-            unit_amount: Math.round(singleItem.price * 100), // paise
+
+            product_data: {
+              name: singleItem.title,
+            },
+
+            unit_amount: Math.round(singleItem.price * 100),
           },
+
           quantity: 1,
         },
       ];
     }
 
-    // Cart purchase - use only cart items
-    return Object.values(cartItems).map(({ qty, data }) => ({
+    // Cart checkout
+    return cartItems.map((item) => ({
       price_data: {
         currency: "inr",
-        product_data: { name: data.name },
-        unit_amount: Math.round(data.price * 100),
+
+        product_data: {
+          name: item.product.title,
+        },
+
+        unit_amount: Math.round(item.product.price * 100),
       },
-      quantity: qty,
+
+      quantity: item.quantity,
     }));
   };
 
   const handleCheckout = async () => {
     const lineItems = getLineItems();
-    if (lineItems.length === 0) return alert("No items to checkout");
+
+    if (lineItems.length === 0) {
+      return alert("No items to checkout");
+    }
 
     try {
       const res = await fetch(
         "http://localhost:8080/api/v1/payments/checkout-session",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",  
-          body: JSON.stringify({ line_items: lineItems }),
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          credentials: "include",
+
+          body: JSON.stringify({
+            line_items: lineItems,
+          }),
         },
       );
 
       if (!res.ok) {
         const text = await res.text();
+
         throw new Error(`Server ${res.status}: ${text}`);
       }
 
       const { url } = await res.json();
 
-      // tell the success page whether to clear the cart
-      if (!singleItem) {
-        localStorage.setItem("shouldClearCart", "true") //mark cart checkout
-     }
-
       window.location.href = url;
     } catch (err) {
       console.error("Stripe checkout error:", err);
-      alert("Unable to start checkout – see console.");
+
+      alert("Unable to start checkout");
     }
   };
 
-  // Disabled if cart empty for cart checkout, or singleItem not provided for single checkout
-  const isDisabled = !singleItem && Object.keys(cartItems).length === 0;
+  const isDisabled = !singleItem && cartItems.length === 0;
 
   return (
     <Button

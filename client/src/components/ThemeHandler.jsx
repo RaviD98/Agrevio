@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 
 const ThemeHandler = () => {
   const [darkMode, setDarkMode] = useState(
-    () => localStorage.getItem("theme") === "dark"
+    () => localStorage.getItem("theme") === "light"
   );
 
   useEffect(() => {
     const root = document.documentElement;
     if (darkMode) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
+      root.classList.add("light");
       localStorage.setItem("theme", "light");
+    } else {
+      root.classList.remove("light");
+      localStorage.setItem("theme", "dark");
     }
   }, [darkMode]);
 

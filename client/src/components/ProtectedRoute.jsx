@@ -1,10 +1,21 @@
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
-  const { user } = useSelector((state) => state.auth);
+import { useGetMeQuery } from "@/features/api/authApi";
 
-  if (user === null) {
+const ProtectedRoute = ({ children }) => {
+  const { data, isLoading, isError } = useGetMeQuery();
+
+  // Wait until auth check completes
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  // If request failed or no user
+  if (isError || !data?.data?.user) {
     return <Navigate to="/login" replace />;
   }
 

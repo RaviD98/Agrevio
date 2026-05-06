@@ -21,6 +21,10 @@ import Payment from "./pages/Payment";
 import PaymentSuccess from "./components/PaymentSuccess ";
 import PaymentCancelled from "./components/PaymentCancelled";
 import Profile from "./pages/Profile";
+import AddProduct from "./pages/AddProduct";
+import VendorDashboard from "./pages/VendorDashboard";
+import EditProduct from "./pages/EditProduct";
+import VendorRoute from "./components/VendorRoute";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,7 +33,15 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       {/* protected pages */}
       <Route
-        path="/products/:category/:itemSlug"
+        path="products/category/:category"
+        element={
+          <ProtectedRoute>
+            <CategoryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="products/item/:productId"
         element={
           <ProtectedRoute>
             <ItemDetails />
@@ -45,11 +57,11 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path="products/:category"
+        path="/add-product"
         element={
-          <ProtectedRoute>
-            <CategoryPage />
-          </ProtectedRoute>
+          <VendorRoute>
+            <AddProduct />
+          </VendorRoute>
         }
       />
       <Route
@@ -82,6 +94,22 @@ const router = createBrowserRouter(
           <ProtectedRoute>
             <Favourites />
           </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendor/dashboard"
+        element={
+          <VendorRoute>
+            <VendorDashboard />
+          </VendorRoute>
+        }
+      />
+      <Route
+        path="/products/edit/:productId"
+        element={
+          <VendorRoute>
+            <EditProduct />
+          </VendorRoute>
         }
       />
       <Route
