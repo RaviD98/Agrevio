@@ -51,6 +51,8 @@ const AgriNavbar = () => {
   };
 
   const handleLogout = () => {
+    dispatch(userLoggedOut());
+    localStorage.removeItem("user");
     toast.success("Logged out successfully");
     navigate("/login");
   };
