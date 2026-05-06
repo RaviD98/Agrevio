@@ -77,7 +77,7 @@ const Favourites = () => {
 
               <div className="flex gap-3 pt-3">
                 <Link
-                  to={`/products/${product._id}`}
+                  to={`/products/item/${product._id}`}
                   className="px-5 py-2 rounded-md text-white font-medium"
                   style={{ backgroundColor: "#68d388" }}
                 >
