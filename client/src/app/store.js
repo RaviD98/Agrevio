@@ -3,7 +3,7 @@ import { authApi } from "../features/api/authApi";
 import authReducer from "../features/authSlice";
 import cartReducer from "@/features/cartSlice";
 import favouritesReducer from "@/features/favouritesSlice";
-
+import { favouritesApi } from "../features/api/favouritesApi";
 /* ---------- hydrate user (already present) ---------- */
 // const persistedUser = JSON.parse(localStorage.getItem("user") || "null");
 
@@ -12,6 +12,7 @@ import favouritesReducer from "@/features/favouritesSlice";
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
+    [favouritesApi.reducerPath]: favouritesApi.reducer,
     auth: authReducer,
     cart: cartReducer,
     favourites: favouritesReducer,
@@ -20,7 +21,8 @@ export const store = configureStore({
   //   auth: { user: persistedUser },
   // },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware)
+  .concat(favouritesApi.middleware),
 });
 
 /* ---------- persist cart on every state change ---------- */

@@ -4,7 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 
 const isAuthenticated = async (req, res, next) => {
   try {
-    const token = req.cookies.accessToken;
+    const token = req.cookies?.accessToken||req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
       throw new ApiError(401, "Not authenticated");
