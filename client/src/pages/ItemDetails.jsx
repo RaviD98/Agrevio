@@ -15,7 +15,7 @@ const ItemDetails = () => {
   const dispatch = useDispatch();
   const [adding, setAdding] = useState(false);
   const key = `${category}:${itemSlug}`;
-  const isLiked = useSelector((state) => state.favourites.items[key]);
+  const isLiked = useSelector((state) => state?.favourites?.items[key]);
 
   const itemData = productData[category]?.[itemSlug];
   const imageSrc = productImages[itemSlug];

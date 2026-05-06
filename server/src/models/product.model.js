@@ -63,7 +63,7 @@ const productSchema = new mongoose.Schema(
       index: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false},
 );
 
 // Conditional validation
