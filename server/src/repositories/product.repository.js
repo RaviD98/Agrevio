@@ -36,3 +36,12 @@ export const updateProductById = (productId, updateData) => {
 export const deleteProductById = (productId) => {
   return Product.findByIdAndDelete(productId);
 };
+
+// Get products by owner
+export const findProductsByOwnerId = (ownerId) => {
+  return Product.find({
+    owner: ownerId,
+  }).sort({
+    createdAt: -1,
+  });
+};

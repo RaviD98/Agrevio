@@ -7,12 +7,16 @@ import {
   findProductById,
   updateProductById,
   deleteProductById,
+  findProductsByOwnerId,
 } from "../repositories/product.repository.js";
 
 // Create product
 export const createProductService = async (userId, productData) => {
   const payload = {
     ...productData,
+
+    category: productData.category.trim().toLowerCase(),
+
     owner: userId,
   };
 
@@ -35,7 +39,7 @@ export const getProductsService = async ({
 
   // category filter
   if (category) {
-    filter.category = category;
+    filter.category = category.trim().toLowerCase();
   }
 
   // type filter
@@ -118,4 +122,14 @@ export const deleteProductService = async (productId, userId) => {
   await deleteProductById(productId);
 
   return;
+};
+
+// Get vendor products
+export const getMyProductsService = async (userId) => {
+  const products =
+    await findProductsByOwnerId(
+      userId,
+    );
+
+  return products;
 };

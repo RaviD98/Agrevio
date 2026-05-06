@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { clearCart } from "@/features/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -9,10 +8,9 @@ export default function PaymentSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(clearCart());
+   
     const shouldClear = localStorage.getItem("shouldClearCart") === "true";
     if (shouldClear) {
-      dispatch(clearCart());
       localStorage.removeItem("shouldClearCart");
     }
   }, [dispatch]);

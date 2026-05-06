@@ -9,6 +9,7 @@ import {
   getProductByIdController,
   updateProductController,
   deleteProductController,
+  getMyProductsController,
 } from "../controllers/productc.ontroller.js";
 
 const router = express.Router();
@@ -16,9 +17,17 @@ const router = express.Router();
 // Public routes
 router.get("/", getProductsController);
 
-router.get("/:productId", getProductByIdController);
 
 // Protected routes
+
+router.get(
+  "/my-products",
+  isAuthenticated,
+  isAuthorized("Seller", "Admin"),
+  getMyProductsController,
+);
+router.get("/:productId", getProductByIdController);
+
 router.post(
   "/",
   isAuthenticated,
