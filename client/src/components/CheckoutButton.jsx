@@ -45,6 +45,7 @@ const CheckoutButton = ({
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",  
           body: JSON.stringify({ line_items: lineItems }),
         },
       );
