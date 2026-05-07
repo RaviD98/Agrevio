@@ -1,11 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import React, { useState } from "react";
+
+import { NavLink, useNavigate } from "react-router-dom";
+
 import { useDispatch, useSelector } from "react-redux";
-import { userLoggedOut } from "@/features/authSlice";
-import Profile from "@/pages/Profile";
+
 import { toast } from "sonner";
 
+import { userLoggedOut } from "@/features/authSlice";
+
+import { useLogoutMutation } from "@/features/api/authApi";
+
+import { useBecomeSellerMutation } from "@/features/api/userApi";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useTheme } from "next-themes";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,163 +23,227 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
+
 import { Button } from "@/components/ui/button";
-import { Leaf, LogOut, Sun, Moon } from "lucide-react";
+
+import {
+  Leaf,
+  LogOut,
+  Moon,
+  Sun,
+  ShoppingCart,
+  Package,
+  Truck,
+  LayoutDashboard,
+  Store,
+} from "lucide-react";
 
 const AgriNavbar = () => {
-  const { user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
-  // 1️⃣ Initialise state from the DOM, not localStorage
-  const [darkMode, setDarkMode] = useState(() =>
-    document.documentElement.classList.contains("dark"),
-  );
+  const dispatch = useDispatch();
 
-  // 2️⃣ Toggle handler that keeps DOM + localStorage in sync
-  const toggleTheme = () => {
-    setDarkMode((prev) => {
-      const next = !prev;
-      const root = document.documentElement;
+  const { user } = useSelector((state) => state.auth);
+  const [logoutApi] = useLogoutMutation();
 
-      if (next) {
-        root.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        root.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
-      return next;
-    });
+  const [becomeSeller, { isLoading: becomingSeller }] =
+    useBecomeSellerMutation();
+
+    const { theme, setTheme } = useTheme();
+
+  // Logout
+  const handleLogout = async () => {
+    try {
+      await logoutApi().unwrap();
+
+      dispatch(userLoggedOut());
+
+      localStorage.removeItem("user");
+
+      toast.success("Logged out successfully");
+
+      navigate("/login");
+    } catch (error) {
+      toast.error(error?.data?.message || "Logout failed");
+    }
   };
 
-  const handleLogout = () => {
-    dispatch(userLoggedOut());
-    localStorage.removeItem("user");
-    toast.success("Logged out successfully");
-    navigate("/login");
+  // Become seller
+  const handleBecomeSeller = async () => {
+    try {
+      await becomeSeller().unwrap();
+
+      toast.success("You are now a seller");
+
+      window.location.reload();
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to become seller");
+    }
   };
 
-  // bg-green-300bg-green-300  dark:bg-green-800
+  const navLinkClass = ({ isActive }) =>
+    `transition hover:text-green-600 dark:hover:text-green-300 ${
+      isActive
+        ? "text-green-700 dark:text-green-300 font-semibold"
+        : "text-gray-700 dark:text-gray-200"
+    }`;
 
   return (
-    <nav className="w-full shadow-md sticky top-0 z-50 bg-[#edf7f6] dark:bg-[#121212]">
-      <div className="max-w-7xl mx-auto flex items-center justify-between py-3 px-6">
+    <nav className="sticky top-0 z-50 border-b border-green-100 dark:border-[#222] bg-white/90 dark:bg-[#121212]/95 backdrop-blur">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2 text-green-950 dark:text-green-400 font-extrabold text-2xl">
-          <Leaf className="text-green-600 dark:text-green-300" />
-          <NavLink to="/" className="hover:underline">
-            AgroHub
+        <div
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 cursor-pointer"
+        >
+          <div className="bg-green-100 dark:bg-green-900/40 p-2 rounded-xl">
+            <Leaf className="h-5 w-5 text-green-700 dark:text-green-300" />
+          </div>
+
+          <h1 className="text-2xl font-bold text-green-800 dark:text-green-300">
+            Agrevio
+          </h1>
+        </div>
+
+        {/* Nav Links */}
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+          <NavLink to="/" className={navLinkClass}>
+            Home
+          </NavLink>
+
+          <NavLink to="/products" className={navLinkClass}>
+            Products
+          </NavLink>
+
+          <NavLink to="/about" className={navLinkClass}>
+            About
+          </NavLink>
+
+          <NavLink to="/contact" className={navLinkClass}>
+            Contact
           </NavLink>
         </div>
 
-        {/* Navigation Links */}
-        <NavigationMenu>
-          <div className="flex gap-6 text-green-900 dark:text-white font-medium">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                isActive
-                  ? "underline underline-offset-4 decoration-2 font-semibold"
-                  : "hover:underline"
-              }
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                isActive
-                  ? "underline underline-offset-4 decoration-2 font-semibold"
-                  : "hover:underline"
-              }
-            >
-              About
-            </NavLink>
-            <NavLink
-              to="/products"
-              className={({ isActive }) =>
-                isActive
-                  ? "underline underline-offset-4 decoration-2 font-semibold"
-                  : "hover:underline"
-              }
-            >
-              Products
-            </NavLink>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                isActive
-                  ? "underline underline-offset-4 decoration-2 font-semibold"
-                  : "hover:underline"
-              }
-            >
-              Contact
-            </NavLink>
-          </div>
-        </NavigationMenu>
-
-        {/* Right Section: Auth + Dark Mode Toggle */}
+        {/* Right */}
         <div className="flex items-center gap-4">
+          {/* Theme */}
           <Button
             size="icon"
             variant="ghost"
-            className="hover:bg-green-200 dark:hover:bg-green-800"
-            onClick={toggleTheme} /* ← use new handler */
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="rounded-full cursor-pointer"
           >
-            {darkMode ? (
-              <Sun className="h-5 w-5 text-yellow-300" />
+            {theme === "dark" ? (
+              <Sun className="h-5 w-5 text-yellow-400" />
             ) : (
-              <Moon className="h-5 w-5 text-green-800" />
+              <Moon className="h-5 w-5 text-green-700" />
             )}
           </Button>
 
+          {/* Logged In */}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className="outline-none focus:outline-none">
-                  <Avatar className="h-9 w-9 cursor-pointer ring ring-green-600 ring-offset-2 ring-offset-white dark:ring-offset-green-950">
-                    <AvatarImage src="" alt={user.name} />
-                    <AvatarFallback>
+                <div className="outline-none cursor-pointer">
+                  <Avatar className="h-10 w-10 ring-2 ring-green-500 ring-offset-2 dark:ring-offset-[#121212]">
+                    <AvatarImage src="" />
+
+                    <AvatarFallback className="bg-green-600 text-white">
                       {user.name?.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </div>
               </DropdownMenuTrigger>
+
               <DropdownMenuContent
                 align="end"
-                className="z-[999] bg-white dark:bg-green-900 text-green-900 dark:text-white"
+                className="w-64 dark:bg-[#1A1A1A]"
               >
-                <DropdownMenuLabel>Welcome, {user.name}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  <div className="flex flex-col">
+                    <span className="font-semibold">{user.name}</span>
+
+                    <span className="text-xs text-gray-500 capitalize">
+                      {user.role}
+                    </span>
+                  </div>
+                </DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
                 <DropdownMenuItem onClick={() => navigate("/profile")}>
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
+
                 <DropdownMenuItem onClick={() => navigate("/cart")}>
-                  My Cart
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  Cart
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/Favourites")}>
+
+                <DropdownMenuItem onClick={() => navigate("/orders")}>
+                  <Package className="mr-2 h-4 w-4" />
+                  Orders
+                </DropdownMenuItem>
+
+                <DropdownMenuItem onClick={() => navigate("/bookings")}>
+                  <Package className="mr-2 h-4 w-4" />
+                  Bookings
+                </DropdownMenuItem>
+
+                <DropdownMenuItem onClick={() => navigate("/deliveries")}>
+                  <Truck className="mr-2 h-4 w-4" />
+                  Deliveries
+                </DropdownMenuItem>
+
+                <DropdownMenuItem onClick={() => navigate("/favourites")}>
                   Favourites
                 </DropdownMenuItem>
+
+                {/* Become Seller */}
+                {user.role === "Buyer" && (
+                  <>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem
+                      onClick={handleBecomeSeller}
+                      disabled={becomingSeller}
+                    >
+                      <Store className="mr-2 h-4 w-4" />
+                      {becomingSeller ? "Processing..." : "Become a Seller"}
+                    </DropdownMenuItem>
+                  </>
+                )}
+
+                {/* Seller */}
+                {(user.role === "Seller" || user.role === "Admin") && (
+                  <>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem
+                      onClick={() => navigate("/vendor/dashboard")}
+                    >
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Vendor Dashboard
+                    </DropdownMenuItem>
+                  </>
+                )}
+
+                <DropdownMenuSeparator />
+
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="text-red-600 dark:text-red-400"
+                  className="text-red-500"
                 >
-                  <LogOut className="mr-2 h-4 w-4" /> Logout
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Button
               onClick={() => navigate("/login")}
-              className="bg-green-600 hover:bg-green-700 text-white dark:bg-green-700"
+              className="bg-green-600 hover:bg-green-700 text-white rounded-xl"
             >
               Login
             </Button>

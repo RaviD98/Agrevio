@@ -8,6 +8,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import CheckoutButton from "@/components/CheckoutButton";
+import SectionLoader from "@/components/SectionLoader";
 
 const Cart = () => {
   const { data, isLoading, isError } = useGetCartQuery();
@@ -27,7 +28,7 @@ const Cart = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading cart...</p>
+        <SectionLoader/>
       </div>
     );
   }

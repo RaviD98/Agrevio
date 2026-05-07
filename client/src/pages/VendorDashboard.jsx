@@ -8,6 +8,7 @@ import {
   useGetMyProductsQuery,
   useDeleteProductMutation,
 } from "@/features/api/productApi";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const VendorDashboard = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const VendorDashboard = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading dashboard...</p>
+        <LoadingScreen/>
       </div>
     );
   }
@@ -56,7 +57,7 @@ const VendorDashboard = () => {
 
         <button
           onClick={() => navigate("/add-product")}
-          className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
+          className="bg-green-600 hover:bg-green-700 transition text-white px-5 py-2 rounded-xl shadow cursor-pointer"
         >
           + Add Product
         </button>

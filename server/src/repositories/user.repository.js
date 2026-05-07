@@ -24,4 +24,24 @@ const findUserByRefreshToken = (token) => {
   return User.findOne({ refreshToken: token });
 };
 
-export {findUserByEmail, findUserByEmailWithPassword, createUser, findUserById, saveUser, findUserByRefreshToken};
+const becomeSeller = (userId) => {
+  return User.findByIdAndUpdate(
+    userId,
+    {
+      role: "Seller",
+    },
+    {
+      new: true,
+    },
+  );
+};
+
+export {
+  findUserByEmail,
+  findUserByEmailWithPassword,
+  createUser,
+  findUserById,
+  saveUser,
+  findUserByRefreshToken,
+  becomeSeller
+};

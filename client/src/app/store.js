@@ -5,6 +5,7 @@ import { productApi } from "@/features/api/productApi";
 import { orderApi } from "@/features/api/orderApi";
 import { bookingApi } from "@/features/api/bookingApi";
 import {deliveryApi} from "@/features/api/deliveryApi";
+import { userApi } from "@/features/api/userApi";
 import authReducer from "../features/authSlice";
 import { cartApi } from "@/features/api/cartApi";
 
@@ -18,6 +19,7 @@ export const store = configureStore({
     [orderApi.reducerPath]: orderApi.reducer,
     [bookingApi.reducerPath]: bookingApi.reducer,
     [deliveryApi.reducerPath]: deliveryApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
 
     auth: authReducer,
   },
@@ -30,7 +32,8 @@ export const store = configureStore({
       .concat(productApi.middleware)
       .concat(orderApi.middleware)
       .concat(bookingApi.middleware)
-      .concat(deliveryApi.middleware),
+      .concat(deliveryApi.middleware)
+      .concat(userApi.middleware),
 });
 
 export default store;

@@ -12,15 +12,27 @@ import {
 } from "lucide-react";
 
 const productCategories = [
-  { label: "Quality Seeds", path: "/products/seeds", icon: Leaf },
-  { label: "Irrigation", path: "/products/irrigation", icon: Droplet },
-  { label: "Machinery", path: "/products/machinery", icon: Hammer },
-  { label: "Farm Tools", path: "/products/tools", icon: Wrench },
-  { label: "Fertilizers", path: "/products/fertilizers", icon: Leaf },
-  { label: "Pesticides", path: "/products/pesticides", icon: Bug },
-  { label: "Greenhouse", path: "/products/greenhouse", icon: Home },
-  { label: "Animal Feed", path: "/products/feed", icon: Coffee },
-  { label: "Storage", path: "/products/storage", icon: Archive },
+  { label: "Quality Seeds", path: "/products/category/seeds", icon: Leaf },
+  { label: "Irrigation", path: "/products/category/irrigation", icon: Droplet },
+  { label: "Machinery", path: "/products/category/machinery", icon: Hammer },
+  { label: "Farm Tools", path: "/products/category/tools", icon: Wrench },
+  {
+    label: "Fertilizers",
+    path: "/products/category/fertilizers",
+    icon: Leaf,
+  },
+  {
+    label: "Pesticides",
+    path: "/products/category/pesticides",
+    icon: Bug,
+  },
+  {
+    label: "Greenhouse",
+    path: "/products/category/greenhouse",
+    icon: Home,
+  },
+  { label: "Animal Feed", path: "/products/category/feed", icon: Coffee },
+  { label: "Storage", path: "/products/category/storage", icon: Archive },
 ];
 
 const ProductNavbar = () => {

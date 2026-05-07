@@ -8,27 +8,12 @@ import ScrollToTop from "@/components/ScrollToTop";
 import NavBar from "@/components/Navbar";
 import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
-import ThemeHandler from "@/components/ThemeHandler";
-
-import { useDispatch } from "react-redux";
-
-import { userLoggedIn } from "@/features/authSlice";
-
 import { useGetMeQuery } from "@/features/api/authApi";
 
 const RootLayout = () => {
   const location = useLocation();
 
-  const dispatch = useDispatch();
-
-  // Restore user session from cookies
-  const { data, isSuccess } = useGetMeQuery();
-
-  useEffect(() => {
-    if (isSuccess && data?.data?.user) {
-      dispatch(userLoggedIn(data.data.user));
-    }
-  }, [data, isSuccess, dispatch]);
+  useGetMeQuery();
 
   const hideNavbarPaths = ["/login"];
 
@@ -44,7 +29,7 @@ const RootLayout = () => {
 
   return (
     <ThemeProvider defaultTheme="system" storageKey="agrohub-theme">
-      <ThemeHandler />
+      {/* <ThemeHandler /> */}
 
       <ScrollToTop />
 

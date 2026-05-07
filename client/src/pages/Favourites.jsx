@@ -5,6 +5,7 @@ import {
   useGetFavouritesQuery,
   useToggleFavouriteMutation,
 } from "@/features/api/favouriteApi";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const Favourites = () => {
   const { data, isLoading, isError } = useGetFavouritesQuery();
@@ -17,7 +18,7 @@ const Favourites = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading favourites...</p>
+        <LoadingScreen />
       </div>
     );
   }
