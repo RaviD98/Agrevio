@@ -28,7 +28,7 @@ const CategoryPage = () => {
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-[#f7f7f4] dark:bg-[#18181b]">
         <SectionLoader />
       </div>
     );
@@ -37,35 +37,59 @@ const CategoryPage = () => {
   // Error
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Failed to load products.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#f7f7f4] dark:bg-[#18181b]">
+        <p className="text-red-500 text-lg font-medium">
+          Failed to load products.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-6 bg-[#edf7f6] dark:bg-[#121212]">
+    <div className="min-h-screen bg-[#f7f7f4] dark:bg-[#18181b] px-4 py-8 md:px-8 transition-colors duration-500">
       {/* Header */}
-      <h2 className="text-3xl font-bold mb-6 capitalize text-green-700 dark:text-green-300">
-        {category.replace(/-/g, " ")} Products
-      </h2>
+      <div className="mb-10">
+        <p className="text-sm uppercase tracking-[0.2em] text-green-600 dark:text-green-400 font-semibold mb-2">
+          Product Category
+        </p>
+
+        <h2 className="text-4xl md:text-5xl font-bold capitalize tracking-tight text-neutral-900 dark:text-neutral-100">
+          {category.replace(/-/g, " ")} Products
+        </h2>
+      </div>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <div className="mb-10 flex flex-col gap-4 md:flex-row">
         {/* Search */}
         <input
           type="text"
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 p-3 rounded-lg border dark:bg-[#1A1A1A]"
+          className="
+            flex-1 rounded-2xl border border-neutral-200
+            bg-white px-5 py-3 text-sm
+            shadow-sm outline-none transition-all duration-300
+            placeholder:text-neutral-400
+            focus:border-green-500 focus:ring-4 focus:ring-green-100
+            dark:border-neutral-800 dark:bg-[#222225]
+            dark:text-white dark:placeholder:text-neutral-500
+            dark:focus:ring-green-900/30
+          "
         />
 
         {/* Type filter */}
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
-          className="p-3 rounded-lg border dark:bg-[#1A1A1A]"
+          className="
+            rounded-2xl border border-neutral-200
+            bg-white px-5 py-3 text-sm
+            shadow-sm outline-none transition-all duration-300
+            focus:border-green-500 focus:ring-4 focus:ring-green-100
+            dark:border-neutral-800 dark:bg-[#222225]
+            dark:text-white dark:focus:ring-green-900/30
+          "
         >
           <option value="">All Types</option>
 
@@ -81,65 +105,109 @@ const CategoryPage = () => {
       {!products.length ? (
         <div className="min-h-[50vh] grid place-items-center">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-red-600 mb-2">
+            <h2 className="mb-3 text-3xl font-bold text-neutral-900 dark:text-white">
               No Products Found
             </h2>
 
-            <p className="text-gray-700 dark:text-gray-300">
-              Try changing filters or search.
+            <p className="text-neutral-600 dark:text-neutral-400">
+              Try changing filters or search keywords.
             </p>
           </div>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {products.map((product) => (
             <Card
               key={product._id}
               onClick={() => navigate(`/products/item/${product._id}`)}
-              className="cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.015]
-                bg-white dark:bg-[#1A1A1A] border border-green-100 dark:border-[#2A2A2A] rounded-2xl overflow-hidden"
+              className="
+                group cursor-pointer overflow-hidden rounded-3xl
+                border border-neutral-200
+                bg-white/90 backdrop-blur-sm
+                shadow-sm transition-all duration-300
+                hover:-translate-y-1 hover:shadow-2xl
+                dark:border-neutral-800 dark:bg-[#222225]
+              "
             >
               {/* Image */}
-              <div className="h-56 overflow-hidden rounded-b-none">
+              <div
+                className="
+                  relative flex h-72 items-center justify-center
+                  overflow-hidden bg-[#f3f4f6]
+                  dark:bg-[#1c1c1f]
+                "
+              >
                 <img
                   src={product.images?.[0] || "https://placehold.co/600x400"}
                   alt={product.title}
-                  className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-105"
+                  className="
+                    h-[90%] w-[90%] object-contain
+                    transition-transform duration-500
+                    group-hover:scale-105
+                  "
                 />
               </div>
 
-              <CardHeader className="p-4">
-                <CardTitle className="text-green-800 dark:text-green-200 text-xl">
+              <CardHeader className="px-6 pt-6 pb-2">
+                <CardTitle
+                  className="
+                    text-2xl font-semibold tracking-tight
+                    text-neutral-900 dark:text-neutral-100
+                  "
+                >
                   {product.title}
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="px-4 pb-5">
-                <p className="text-gray-700 dark:text-gray-400 mb-3 text-sm">
+              <CardContent className="px-6 pb-6">
+                <p
+                  className="
+                    mb-5 text-sm leading-relaxed
+                    text-neutral-600 dark:text-neutral-400
+                  "
+                >
                   {product.description?.slice(0, 80) ||
                     "No description available"}
                 </p>
 
                 {/* Type */}
-                <p className="mb-2 text-sm font-medium capitalize">
-                  Type: {product.type}
-                </p>
+                <div className="mb-4 flex items-center justify-between">
+                  <span
+                    className="
+                      rounded-full bg-green-100 px-3 py-1
+                      text-xs font-semibold capitalize
+                      text-green-700
+                      dark:bg-green-900/30 dark:text-green-300
+                    "
+                  >
+                    {product.type}
+                  </span>
+                </div>
 
                 {/* Price */}
-                {product.type !== "rent" && (
-                  <p className="font-semibold text-green-700 mb-2">
-                    ₹{product.price}
-                  </p>
-                )}
+                <div className="space-y-2 mb-6">
+                  {product.type !== "rent" && (
+                    <p className="text-2xl font-bold text-green-700 dark:text-green-400">
+                      ₹{product.price}
+                    </p>
+                  )}
 
-                {product.type !== "sale" && (
-                  <p className="font-semibold text-blue-700 mb-3">
-                    ₹{product.pricePerHour}
-                    /hour
-                  </p>
-                )}
+                  {product.type !== "sale" && (
+                    <p className="text-lg font-semibold text-blue-700 dark:text-blue-400">
+                      ₹{product.pricePerHour}/hour
+                    </p>
+                  )}
+                </div>
 
-                <button className="px-4 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md">
+                <button
+                  className="
+                    w-full rounded-2xl bg-green-600
+                    px-5 py-3 text-sm font-medium text-white
+                    transition-all duration-300
+                    hover:bg-green-700
+                    active:scale-[0.98]
+                  "
+                >
                   View Details
                 </button>
               </CardContent>
