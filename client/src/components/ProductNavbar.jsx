@@ -1,86 +1,137 @@
 import React from "react";
+
 import { useNavigate, useLocation } from "react-router-dom";
+
 import {
-  Leaf,
-  Droplet,
-  Hammer,
-  Wrench,
-  Bug,
-  Home,
-  Coffee,
-  Archive,
-} from "lucide-react";
+  GiWheat,
+  GiWateringCan,
+  GiFarmTractor,
+  GiToolbox,
+  GiPlantRoots,
+  GiBugNet,
+  GiGreenhouse,
+  GiSittingDog,
+  GiWoodPile,
+} from "react-icons/gi";
 
 const productCategories = [
-  { label: "Quality Seeds", path: "/products/category/seeds", icon: Leaf },
-  { label: "Irrigation", path: "/products/category/irrigation", icon: Droplet },
-  { label: "Machinery", path: "/products/category/machinery", icon: Hammer },
-  { label: "Farm Tools", path: "/products/category/tools", icon: Wrench },
+  {
+    label: "Quality Seeds",
+    path: "/products/category/seeds",
+    icon: GiWheat,
+  },
+  {
+    label: "Irrigation",
+    path: "/products/category/irrigation",
+    icon: GiWateringCan,
+  },
+  {
+    label: "Machinery",
+    path: "/products/category/machinery",
+    icon: GiFarmTractor,
+  },
+  {
+    label: "Farm Tools",
+    path: "/products/category/tools",
+    icon: GiToolbox,
+  },
   {
     label: "Fertilizers",
     path: "/products/category/fertilizers",
-    icon: Leaf,
+    icon: GiPlantRoots,
   },
   {
     label: "Pesticides",
     path: "/products/category/pesticides",
-    icon: Bug,
+    icon: GiBugNet,
   },
   {
     label: "Greenhouse",
     path: "/products/category/greenhouse",
-    icon: Home,
+    icon: GiGreenhouse,
   },
-  { label: "Animal Feed", path: "/products/category/feed", icon: Coffee },
-  { label: "Storage", path: "/products/category/storage", icon: Archive },
+  {
+    label: "Animal Feed",
+    path: "/products/category/feed",
+    icon: GiSittingDog,
+  },
+  {
+    label: "Storage",
+    path: "/products/category/storage",
+    icon: GiWoodPile,
+  },
 ];
 
 const ProductNavbar = () => {
   const navigate = useNavigate();
+
   const { pathname } = useLocation();
 
   return (
-    <nav className="w-full bg-[#edf7f6] dark:bg-[#121212] border-b border-green-200/50 dark:border-green-800/50">
-      <ul className="flex md:grid md:grid-cols-9 overflow-x-auto md:overflow-visible snap-x snap-mandatory">
-        {productCategories.map(({ label, path, icon: Icon }) => {
-          const isActive = pathname.startsWith(path);
-          return (
-            <li
-              key={path}
-              role="link"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && navigate(path)}
-              onClick={() => navigate(path)}
-              title={label}
-              className={`
-                flex flex-col items-center justify-center
-                px-6 py-4 flex-shrink-0 md:flex-shrink
-                cursor-pointer select-none snap-center
-                transition duration-200
-                ${
-                  isActive
-                    ? "text-green-700 dark:text-green-300"
-                    : "text-green-900 dark:text-green-400"
-                }
-                hover:text-[#68d388] dark:hover:text-[#68d388]
-              `}
-            >
-              <Icon
-                className={`w-6 h-6 mb-1 transition-transform ${
-                  isActive ? "-translate-y-[2px]" : ""
-                }`}
-              />
-              <span
-                className={`text-sm font-medium ${
-                  isActive ? "underline underline-offset-4" : ""
-                }`}
+    <nav
+      className="
+        w-full
+        border-b border-gray-200
+        bg-[#FBFAF5]
+        dark:border-[#3A3A3A]
+        dark:bg-[#2C2C2C]
+        transition-colors duration-300
+        font-['Inter']
+      "
+    >
+      <div className="max-w-7xl mx-auto">
+        <ul
+          className="
+            flex overflow-x-auto
+            md:grid md:grid-cols-9
+            gap-2
+            px-4 py-3
+            scrollbar-hide
+          "
+        >
+          {productCategories.map(({ label, path, icon: Icon }) => {
+            const isActive = pathname.startsWith(path);
+
+            return (
+              <li
+                key={path}
+                role="link"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && navigate(path)}
+                onClick={() => navigate(path)}
+                title={label}
+                className={`
+                  group flex min-w-[110px] cursor-pointer
+                  flex-col items-center justify-center
+                  rounded-2xl px-4 py-4
+                  text-center transition-all duration-300
+                  ${
+                    isActive
+                      ? "bg-[#007200] text-white"
+                      : "text-gray-700 hover:bg-[#007200]/10 hover:text-[#007200] dark:text-gray-200"
+                  }
+                `}
               >
-                {label}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
+                <Icon
+                  className={`
+                    mb-2 text-2xl transition-transform duration-300
+                    ${isActive ? "scale-110" : "group-hover:scale-105"}
+                  `}
+                />
+
+                <span
+                  className={`
+                    text-sm font-medium leading-tight
+                    ${isActive ? "font-semibold" : ""}
+                  `}
+                >
+                  {label}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </nav>
   );
 };

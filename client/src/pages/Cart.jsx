@@ -7,8 +7,16 @@ import {
 } from "@/features/api/cartApi";
 
 import { Button } from "@/components/ui/button";
+
 import CheckoutButton from "@/components/CheckoutButton";
+
 import SectionLoader from "@/components/SectionLoader";
+
+import EmptyState from "@/components/EmptyState";
+
+import FallbackImage from "@/components/FallbackImage";
+
+import { LiaTractorSolid } from "react-icons/lia";
 
 const Cart = () => {
   const { data, isLoading, isError } = useGetCartQuery();
@@ -27,8 +35,8 @@ const Cart = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <SectionLoader/>
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <SectionLoader />
       </div>
     );
   }
@@ -36,8 +44,8 @@ const Cart = () => {
   // Error state
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Failed to load cart.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <p className="text-red-500">Failed to load cart.</p>
       </div>
     );
   }
@@ -45,80 +53,226 @@ const Cart = () => {
   // Empty cart
   if (!cartItems.length) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-8 bg-[#edf7f6] dark:bg-[#121212]">
-        <p className="text-center text-lg font-medium text-green-700 dark:text-gray-400">
-          Your cart is empty.
-        </p>
+      <div className="min-h-[90vh] flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <EmptyState
+          icon={<LiaTractorSolid className="text-8xl" />}
+          title="Your cart is empty"
+          description="Add products to continue shopping."
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-6 bg-[#edf7f6] dark:bg-[#121212] transition-colors duration-300">
-      <div className="max-w-4xl mx-auto p-8 rounded-xl shadow-lg bg-white dark:bg-[#1A1A1A] border dark:border-[#2A2A2A]">
-        <h2 className="text-3xl font-bold mb-8 text-green-800 dark:text-white">
-          Your Shopping Cart
-        </h2>
-
-        <ul className="space-y-4 overflow-auto">
-          {cartItems.map((item) => (
-            <li
-              key={item.product._id}
-              className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg
-              border border-green-200 dark:border-[#2A2A2A]
-              bg-white hover:bg-[#e4f9df]
-              dark:bg-[#1A1A1A] dark:hover:bg-[#2A2A2A]
-              transition"
-            >
-              <div>
-                <h3 className="text-lg font-semibold text-green-900 dark:text-white">
-                  {item.product.title}
-                </h3>
-
-                <p className="text-green-700 dark:text-gray-300 mt-1">
-                  ₹{item.product.price} × {item.quantity}
-                  <span className="font-medium dark:text-white">
-                    {" "}
-                    = ₹{item.product.price * item.quantity}
-                  </span>
-                </p>
-              </div>
-
-              <Button
-                variant="destructive"
-                className="mt-4 sm:mt-0"
-                onClick={() => removeFromCart(item.product._id)}
-              >
-                Remove
-              </Button>
-            </li>
-          ))}
-        </ul>
-
-        <footer
-          className="mt-8 pt-6 border-t border-green-300 dark:border-gray-700
-          flex flex-col sm:flex-row justify-between items-center"
-        >
-          <p className="text-2xl font-bold text-green-800 dark:text-white">
-            Total: ₹{totalPrice}
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        px-4 py-8 md:px-6
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        font-['Manrope']
+      "
+    >
+      <div className="mx-auto max-w-5xl">
+        {/* Header */}
+        <div className="mb-10">
+          <p
+            className="
+              mb-3 text-sm
+              font-semibold uppercase tracking-[0.2em]
+              text-[#007200]
+            "
+          >
+            Shopping
           </p>
 
-          <CheckoutButton
-            metadata={{
-              type: "order",
-              resourceId: "pending",
-            }}
-          />
-
-          <Button
-            className="bg-[#68d388] hover:bg-green-600 text-white mt-4 sm:mt-0"
-            onClick={() => clearCart()}
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-bold
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
           >
-            Clear Cart
-          </Button>
-        </footer>
+            Your Cart
+          </h1>
+
+          <p
+            className="
+              mt-4 text-base
+              text-gray-600
+              dark:text-gray-300
+            "
+          >
+            Review your selected agricultural products before checkout.
+          </p>
+        </div>
+
+        {/* Cart Container */}
+        <div
+          className="
+            rounded-[2rem]
+            border border-gray-200
+            bg-white
+            p-5 md:p-8
+            shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+            dark:border-[#4A4A4A]
+            dark:bg-[#3A3A3A]
+          "
+        >
+          {/* Cart Items */}
+          <div className="space-y-5">
+            {cartItems.map((item) => (
+              <div
+                key={item.product._id}
+                className="
+                  flex flex-col gap-5
+                  rounded-3xl
+                  border border-gray-200
+                  bg-[#FBFAF5]
+                  p-5
+                  transition-all duration-300
+                  sm:flex-row sm:items-center sm:justify-between
+                  dark:border-[#4A4A4A]
+                  dark:bg-[#2C2C2C]
+                "
+              >
+                {/* Left */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+                  {/* Image */}
+                  <FallbackImage
+                    src={item.product?.images?.[0]}
+                    alt={item.product?.title}
+                    className="
+                      h-24 w-24
+                      rounded-2xl
+                      border border-gray-200
+                      object-cover
+                      dark:border-[#4A4A4A]
+                    "
+                  />
+
+                  {/* Info */}
+                  <div>
+                    <h3
+                      className="
+                        text-2xl font-bold
+                        text-[#1F2937]
+                        dark:text-white
+                        font-['Arvo']
+                      "
+                    >
+                      {item.product.title}
+                    </h3>
+
+                    <p
+                      className="
+                        mt-2 text-sm capitalize
+                        text-gray-500
+                        dark:text-gray-400
+                      "
+                    >
+                      {item.product.category}
+                    </p>
+
+                    <p
+                      className="
+                        mt-3 text-base
+                        text-gray-700
+                        dark:text-gray-300
+                      "
+                    >
+                      ₹{item.product.price} × {item.quantity}
+                    </p>
+
+                    <p
+                      className="
+                        mt-1 text-lg font-semibold
+                        text-[#007200]
+                        dark:text-green-300
+                      "
+                    >
+                      ₹{item.product.price * item.quantity}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Remove */}
+                <Button
+                  variant="destructive"
+                  onClick={() => removeFromCart(item.product._id)}
+                  className="
+                    cursor-pointer
+                    rounded-2xl
+                    px-5 py-2.5
+                    text-sm font-semibold
+                  "
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div
+            className="
+              mt-8 flex flex-col gap-6
+              border-t border-gray-200
+              pt-6
+              lg:flex-row lg:items-center lg:justify-between
+              dark:border-[#4A4A4A]
+            "
+          >
+            {/* Total */}
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Total Amount
+              </p>
+
+              <h2
+                className="
+                  mt-2 text-4xl
+                  font-bold
+                  text-[#007200]
+                  dark:text-green-300
+                  font-['Arvo']
+                "
+              >
+                ₹{totalPrice}
+              </h2>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <CheckoutButton
+                metadata={{
+                  type: "order",
+                  resourceId: "pending",
+                }}
+              />
+
+              <Button
+                onClick={() => clearCart()}
+                className="
+                  cursor-pointer
+                  rounded-2xl
+                  bg-[#007200]
+                  px-6 py-3
+                  text-white font-semibold
+                  transition-all duration-300
+                  hover:bg-[#04471c]
+                "
+              >
+                Clear Cart
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

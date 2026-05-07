@@ -1,10 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
+
 import { Outlet, useLocation } from "react-router-dom";
+
 import { ThemeProvider } from "@/components/ThemeProvider";
+
 import ScrollToTop from "@/components/ScrollToTop";
+
 import NavBar from "@/components/Navbar";
+
 import Breadcrumb from "@/components/Breadcrumb";
+
 import Footer from "@/components/Footer";
+
 import { useGetMeQuery } from "@/features/api/authApi";
 
 const RootLayout = () => {
@@ -26,26 +33,35 @@ const RootLayout = () => {
 
   return (
     <ThemeProvider defaultTheme="system" storageKey="agrohub-theme">
-      {/* <ThemeHandler /> */}
-
       <ScrollToTop />
 
-      <div className="w-full max-w-[100vw] overflow-x-hidden flex flex-col min-h-screen transition-colors duration-500 bg-background text-foreground scrollbar-hide">
+      <div
+        className="
+          min-h-screen w-full max-w-[100vw]
+          overflow-x-hidden
+          bg-[#FBFAF5]
+          text-[#1f2937]
+          transition-colors duration-300
+          dark:bg-[#2C2C2C]
+          dark:text-[#F5F5F5]
+          font-['Manrope']
+        "
+      >
         {/* Navbar */}
         {!shouldHideNavbar && (
-          <div className="sticky top-0 z-50 bg-background">
+          <header className="sticky top-0 z-50">
             <NavBar />
-          </div>
+          </header>
         )}
 
         {/* Breadcrumb */}
         {!shouldHideBreadcrumb && (
-          <div className="sticky top-[var(--navbar-height)] z-40 bg-background border-b border-border">
+          <div className="sticky top-[72px] z-40">
             <Breadcrumb />
           </div>
         )}
 
-        {/* Main Content */}
+        {/* Main */}
         <main className="flex-1">
           <Outlet />
         </main>

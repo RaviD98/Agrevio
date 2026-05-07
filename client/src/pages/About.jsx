@@ -7,81 +7,169 @@ const About = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="min-h-screen flex items-center justify-center transition-colors duration-300 px-6 py-16 bg-[#edf7f6] dark:bg-[#121212] w-full">
-      <div className="w-full max-w-6xl mx-auto text-center">
-        {/* Heading */}
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-green-700 dark:text-green-400">
-          About&nbsp;
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 via-green-500 to-green-400 dark:from-green-400 dark:via-green-300 dark:to-green-200">
-            AgroHub
-          </span>
-        </h1>
-        <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-800 dark:text-gray-300 mb-12">
-          We’re passionate creators building innovative digital experiences that
-          empower the agricultural community.
-        </p>
+    <section
+      className="
+        min-h-screen w-full
+        bg-[#FBFAF5] dark:bg-[#2C2C2C]
+        transition-colors duration-300
+        px-4 sm:px-6 py-16
+        text-[#1f2937] dark:text-[#F5F5F5]
+        font-['Inter']
+      "
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Hero */}
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <p
+            className="
+              text-sm uppercase tracking-[0.2em]
+              text-[#007200] mb-4 font-semibold
+            "
+          >
+            About Us
+          </p>
 
-        {/* Feature Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
-          {/* Feature Card */}
+          <h1
+            className="
+              text-4xl sm:text-5xl md:text-6xl
+              leading-tight font-bold
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
+            Building Smarter Agriculture
+          </h1>
+
+          <p
+            className="
+              mt-6 text-base sm:text-lg
+              leading-relaxed
+              text-gray-600 dark:text-gray-300
+            "
+          >
+            AgroHub is focused on simplifying agricultural services through
+            technology. We create digital solutions that help farmers,
+            businesses, and agricultural communities work smarter and grow
+            faster.
+          </p>
+        </div>
+
+        {/* Cards */}
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {[
             {
-              icon: (
-                <Leaf className="w-8 h-8 text-green-600 dark:text-green-400 mb-3" />
-              ),
+              icon: <Leaf className="w-7 h-7 text-[#007200]" />,
               title: "Our Mission",
-              text: "Simplify technology for every farmer by delivering high‑quality, scalable, and user‑centric solutions that make a tangible difference.",
+              text: "Deliver practical and scalable technology solutions that improve accessibility and efficiency in agriculture.",
             },
             {
-              icon: (
-                <Rocket className="w-8 h-8 text-green-600 dark:text-green-400 mb-3" />
-              ),
+              icon: <Rocket className="w-7 h-7 text-[#007200]" />,
               title: "What We Do",
-              text: "From full‑stack web development to mobile solutions, we bring your agri‑tech ideas to life with precision and passion.",
+              text: "We build modern platforms that connect farmers, sellers, and agricultural services in one ecosystem.",
             },
             {
-              icon: (
-                <Lightbulb className="w-8 h-8 text-green-600 dark:text-green-400 mb-3" />
-              ),
+              icon: <Lightbulb className="w-7 h-7 text-[#007200]" />,
               title: "Our Vision",
-              text: "To be a leading force in digital transformation, shaping a better tomorrow for agriculture through technology and innovation.",
+              text: "To modernize agriculture with digital innovation while keeping technology simple and accessible.",
             },
             {
-              icon: (
-                <Handshake className="w-8 h-8 text-green-600 dark:text-green-400 mb-3" />
-              ),
+              icon: <Handshake className="w-7 h-7 text-[#007200]" />,
               title: "Why Choose Us",
-              text: "We value quality, transparency, and partnership. Working with us means results, reliability, and respect.",
+              text: "We value reliability, transparency, and long-term impact through clean and meaningful solutions.",
             },
           ].map((feature, i) => (
             <div
               key={i}
-              className="p-6 bg-white dark:bg-[#1A1A1A] rounded-xl shadow-lg hover:shadow-xl transition border border-green-100 dark:border-green-800"
+              className="
+                rounded-3xl border border-gray-200
+                bg-white p-7
+                transition-all duration-300
+                hover:-translate-y-1
+                hover:border-[#007200]/20
+                dark:border-[#3A3A3A]
+                dark:bg-[#3A3A3A]
+              "
             >
-              {feature.icon}
-              <h2 className="text-xl font-semibold text-green-700 dark:text-green-300 mb-2">
+              <div
+                className="
+                  mb-5 flex h-14 w-14
+                  items-center justify-center
+                  rounded-2xl
+                  bg-[#007200]/10
+                "
+              >
+                {feature.icon}
+              </div>
+
+              <h2
+                className="
+                  mb-3 text-2xl font-bold
+                  text-[#007200]
+                  dark:text-green-300
+                  font-['Arvo']
+                "
+              >
                 {feature.title}
               </h2>
-              <p className="text-gray-700 dark:text-gray-400 text-sm leading-relaxed">
+
+              <p
+                className="
+                  text-sm leading-relaxed
+                  text-gray-600 dark:text-gray-300
+                "
+              >
                 {feature.text}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Call to Action */}
-        <div className="mt-16">
-          <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
-            Let’s Connect
+        {/* CTA */}
+        <div
+          className="
+            mt-20 rounded-[2rem]
+            border border-gray-200
+            bg-white px-6 py-12
+            text-center
+            dark:border-[#3A3A3A]
+            dark:bg-[#3A3A3A]
+          "
+        >
+          <h3
+            className="
+              text-3xl md:text-4xl
+              font-bold mb-4
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
+            Let’s Grow Together
           </h3>
-          <p className="text-gray-700 dark:text-gray-400 mb-6 max-w-md mx-auto">
-            We’d love to hear from you. Drop us a message and let’s grow
-            together!
+
+          <p
+            className="
+              max-w-2xl mx-auto
+              text-gray-600 dark:text-gray-300
+              leading-relaxed mb-8
+            "
+          >
+            Whether you’re a farmer, supplier, or agri-business, AgroHub is here
+            to help you connect, grow, and succeed through technology.
           </p>
+
           <Button
             onClick={() => navigate("/contact")}
             size="lg"
-            className="bg-[#68d388] hover:bg-green-600 dark:bg-green-500 dark:hover:bg-green-600 text-white font-medium rounded-lg px-8 py-3 shadow-md"
+            className="
+              rounded-2xl
+              bg-[#007200]
+              px-8 py-6
+              text-base font-medium text-white
+              transition-all duration-300
+              hover:bg-[#04471c]
+            "
           >
             Contact Us
           </Button>

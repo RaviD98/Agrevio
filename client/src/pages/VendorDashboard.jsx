@@ -8,7 +8,14 @@ import {
   useGetMyProductsQuery,
   useDeleteProductMutation,
 } from "@/features/api/productApi";
+
 import LoadingScreen from "@/components/LoadingScreen";
+
+import FallbackImage from "@/components/FallbackImage";
+
+import EmptyState from "@/components/EmptyState";
+
+import { Package } from "lucide-react";
 
 const VendorDashboard = () => {
   const navigate = useNavigate();
@@ -32,8 +39,8 @@ const VendorDashboard = () => {
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingScreen/>
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <LoadingScreen />
       </div>
     );
   }
@@ -41,91 +48,228 @@ const VendorDashboard = () => {
   // Error
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Failed to load dashboard.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <p className="text-red-500 text-lg">Failed to load dashboard.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#edf7f6] dark:bg-[#121212] p-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-        <h1 className="text-3xl font-bold text-green-700 dark:text-green-300">
-          Vendor Dashboard
-        </h1>
-
-        <button
-          onClick={() => navigate("/add-product")}
-          className="bg-green-600 hover:bg-green-700 transition text-white px-5 py-2 rounded-xl shadow cursor-pointer"
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        px-4 py-8 md:px-6
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        font-['Manrope']
+      "
+    >
+      <div className="mx-auto max-w-7xl">
+        {/* Header */}
+        <div
+          className="
+            mb-10 flex flex-col gap-5
+            md:flex-row md:items-center md:justify-between
+          "
         >
-          + Add Product
-        </button>
-      </div>
-
-      {/* Empty */}
-      {!products.length ? (
-        <div className="text-center mt-20">
-          <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-300">
-            No products found
-          </h2>
-
-          <p className="mt-2 text-gray-500">
-            Start by adding your first product.
-          </p>
-        </div>
-      ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <div
-              key={product._id}
-              className="bg-white dark:bg-[#1A1A1A] rounded-2xl overflow-hidden shadow-lg border dark:border-[#2A2A2A]"
+          <div>
+            <p
+              className="
+                mb-3 text-sm
+                font-semibold uppercase tracking-[0.2em]
+                text-[#007200]
+              "
             >
-              {/* Image */}
-              <div className="h-52 overflow-hidden">
-                <img
-                  src={product.images?.[0] || "https://placehold.co/600x400"}
-                  alt={product.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              Vendor Panel
+            </p>
 
-              {/* Content */}
-              <div className="p-5">
-                <h2 className="text-xl font-bold text-green-700 dark:text-green-300 mb-2">
-                  {product.title}
-                </h2>
+            <h1
+              className="
+                text-4xl md:text-5xl
+                font-bold
+                text-[#007200]
+                dark:text-green-300
+                font-['Arvo']
+              "
+            >
+              Vendor Dashboard
+            </h1>
 
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  {product.description}
-                </p>
+            <p
+              className="
+                mt-4 text-base
+                text-gray-600
+                dark:text-gray-300
+              "
+            >
+              Manage your agricultural products and listings.
+            </p>
+          </div>
 
-                <p className="font-medium mb-2">Category: {product.category}</p>
+          {/* Add Product */}
+          <button
+            onClick={() => navigate("/add-product")}
+            className="
+              cursor-pointer
+              rounded-2xl
+              bg-[#007200]
+              px-6 py-3
+              text-sm font-semibold text-white
+              transition-all duration-300
+              hover:bg-[#04471c]
+            "
+          >
+            + Add Product
+          </button>
+        </div>
 
-                <p className="font-medium mb-4">Type: {product.type}</p>
+        {/* Empty */}
+        {!products.length ? (
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <EmptyState
+              icon={<Package className="h-20 w-20" />}
+              title="No products found"
+              description="Start by adding your first product."
+            />
+          </div>
+        ) : (
+          <div
+            className="
+              grid gap-6
+              sm:grid-cols-2
+              lg:grid-cols-3
+              xl:grid-cols-4
+            "
+          >
+            {products.map((product) => (
+              <div
+                key={product._id}
+                className="
+                  overflow-hidden
+                  rounded-[1.8rem]
+                  border border-gray-200
+                  bg-white
+                  shadow-[0_10px_30px_rgba(0,0,0,0.05)]
+                  transition-all duration-300
+                  hover:-translate-y-1
+                  dark:border-[#4A4A4A]
+                  dark:bg-[#3A3A3A]
+                "
+              >
+                {/* Image */}
+                <div
+                  className="
+                    flex h-56 items-center justify-center
+                    bg-[#FBFAF5]
+                    p-4
+                    dark:bg-[#2C2C2C]
+                  "
+                >
+                  <FallbackImage
+                    src={product.images?.[0]}
+                    alt={product.title}
+                    className="
+                      h-full w-full
+                      object-contain
+                    "
+                  />
+                </div>
 
-                {/* Actions */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => navigate(`/products/edit/${product._id}`)}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
+                {/* Content */}
+                <div className="p-5">
+                  {/* Title */}
+                  <h2
+                    className="
+                      line-clamp-1
+                      text-2xl font-bold
+                      text-[#1F2937]
+                      dark:text-white
+                      font-['Arvo']
+                    "
                   >
-                    Edit
-                  </button>
+                    {product.title}
+                  </h2>
 
-                  <button
-                    onClick={() => handleDelete(product._id)}
-                    className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg"
+                  {/* Description */}
+                  <p
+                    className="
+                      mt-3 line-clamp-2
+                      text-sm leading-relaxed
+                      text-gray-600
+                      dark:text-gray-300
+                    "
                   >
-                    Delete
-                  </button>
+                    {product.description}
+                  </p>
+
+                  {/* Details */}
+                  <div className="mt-4 space-y-2">
+                    <p
+                      className="
+                        text-sm
+                        text-gray-600
+                        dark:text-gray-300
+                      "
+                    >
+                      <span className="font-semibold">Category:</span>{" "}
+                      <span className="capitalize">{product.category}</span>
+                    </p>
+
+                    <p
+                      className="
+                        text-sm
+                        text-gray-600
+                        dark:text-gray-300
+                      "
+                    >
+                      <span className="font-semibold">Type:</span>{" "}
+                      <span className="capitalize">{product.type}</span>
+                    </p>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="mt-6 flex gap-3">
+                    <button
+                      onClick={() => navigate(`/products/edit/${product._id}`)}
+                      className="
+                        flex-1 cursor-pointer
+                        rounded-2xl
+                        bg-[#007200]
+                        px-4 py-2.5
+                        text-sm font-semibold text-white
+                        transition-all duration-300
+                        hover:bg-[#04471c]
+                      "
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(product._id)}
+                      className="
+                        flex-1 cursor-pointer
+                        rounded-2xl
+                        border border-red-300
+                        px-4 py-2.5
+                        text-sm font-semibold
+                        text-red-500
+                        transition-all duration-300
+                        hover:bg-red-50
+                        dark:border-red-500/40
+                        dark:hover:bg-red-500/10
+                      "
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 

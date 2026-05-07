@@ -5,7 +5,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useGetProductsQuery } from "@/features/api/productApi";
+
 import SectionLoader from "@/components/SectionLoader";
+
+import { useDebounce } from "use-debounce";
+
+import FallbackImage from "@/components/FallbackImage";
 
 const CategoryPage = () => {
   const { category } = useParams();
@@ -15,11 +20,13 @@ const CategoryPage = () => {
   // Filters
   const [search, setSearch] = useState("");
 
+  const [debouncedSearch] = useDebounce(search, 500);
+
   const [type, setType] = useState("");
 
   const { data, isLoading, isError } = useGetProductsQuery({
     category,
-    search,
+    search: debouncedSearch,
     type,
   });
 
@@ -28,7 +35,7 @@ const CategoryPage = () => {
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f7f7f4] dark:bg-[#18181b]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
         <SectionLoader />
       </div>
     );
@@ -37,7 +44,7 @@ const CategoryPage = () => {
   // Error
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f7f7f4] dark:bg-[#18181b]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
         <p className="text-red-500 text-lg font-medium">
           Failed to load products.
         </p>
@@ -46,176 +53,279 @@ const CategoryPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f7f4] dark:bg-[#18181b] px-4 py-8 md:px-8 transition-colors duration-500">
-      {/* Header */}
-      <div className="mb-10">
-        <p className="text-sm uppercase tracking-[0.2em] text-green-600 dark:text-green-400 font-semibold mb-2">
-          Product Category
-        </p>
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        px-4 py-8 md:px-6 lg:px-8
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        font-['Manrope']
+      "
+    >
+      <div className="mx-auto max-w-7xl">
+        {/* Header */}
+        <div className="mb-10">
+          <p
+            className="
+              mb-3 text-sm
+              font-semibold uppercase tracking-[0.2em]
+              text-[#007200]
+            "
+          >
+            Product Category
+          </p>
 
-        <h2 className="text-4xl md:text-5xl font-bold capitalize tracking-tight text-neutral-900 dark:text-neutral-100">
-          {category.replace(/-/g, " ")} Products
-        </h2>
-      </div>
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-bold capitalize
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
+            {category.replace(/-/g, " ")} Products
+          </h1>
 
-      {/* Filters */}
-      <div className="mb-10 flex flex-col gap-4 md:flex-row">
-        {/* Search */}
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          <p
+            className="
+              mt-4 max-w-2xl
+              text-base leading-relaxed
+              text-gray-600
+              dark:text-gray-300
+            "
+          >
+            Browse high-quality agricultural products and equipment tailored for
+            modern farming needs.
+          </p>
+        </div>
+
+        {/* Filters */}
+        <div
           className="
-            flex-1 rounded-2xl border border-neutral-200
-            bg-white px-5 py-3 text-sm
-            shadow-sm outline-none transition-all duration-300
-            placeholder:text-neutral-400
-            focus:border-green-500 focus:ring-4 focus:ring-green-100
-            dark:border-neutral-800 dark:bg-[#222225]
-            dark:text-white dark:placeholder:text-neutral-500
-            dark:focus:ring-green-900/30
-          "
-        />
-
-        {/* Type filter */}
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="
-            rounded-2xl border border-neutral-200
-            bg-white px-5 py-3 text-sm
-            shadow-sm outline-none transition-all duration-300
-            focus:border-green-500 focus:ring-4 focus:ring-green-100
-            dark:border-neutral-800 dark:bg-[#222225]
-            dark:text-white dark:focus:ring-green-900/30
+            mb-10 flex flex-col gap-4
+            lg:flex-row
           "
         >
-          <option value="">All Types</option>
+          {/* Search */}
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="
+              w-full flex-1
+              rounded-2xl
+              border border-gray-200
+              bg-white
+              px-5 py-3
+              text-sm
+              outline-none transition-all duration-300
+              placeholder:text-gray-400
+              focus:border-[#007200]
+              focus:ring-4 focus:ring-[#007200]/10
+              dark:border-[#4A4A4A]
+              dark:bg-[#3A3A3A]
+              dark:text-white
+            "
+          />
 
-          <option value="sale">Sale</option>
+          {/* Type Filter */}
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="
+              w-full cursor-pointer
+              rounded-2xl
+              border border-gray-200
+              bg-white
+              px-5 py-3
+              text-sm
+              outline-none transition-all duration-300
+              focus:border-[#007200]
+              focus:ring-4 focus:ring-[#007200]/10
+              lg:w-[220px]
+              dark:border-[#4A4A4A]
+              dark:bg-[#3A3A3A]
+              dark:text-white
+            "
+          >
+            <option value="">All Types</option>
 
-          <option value="rent">Rent</option>
+            <option value="sale">Sale</option>
 
-          <option value="both">Both</option>
-        </select>
-      </div>
+            <option value="rent">Rent</option>
 
-      {/* Empty */}
-      {!products.length ? (
-        <div className="min-h-[50vh] grid place-items-center">
-          <div className="text-center">
-            <h2 className="mb-3 text-3xl font-bold text-neutral-900 dark:text-white">
-              No Products Found
-            </h2>
-
-            <p className="text-neutral-600 dark:text-neutral-400">
-              Try changing filters or search keywords.
-            </p>
-          </div>
+            <option value="both">Both</option>
+          </select>
         </div>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-          {products.map((product) => (
-            <Card
-              key={product._id}
-              onClick={() => navigate(`/products/item/${product._id}`)}
-              className="
-                group cursor-pointer overflow-hidden rounded-3xl
-                border border-neutral-200
-                bg-white/90 backdrop-blur-sm
-                shadow-sm transition-all duration-300
-                hover:-translate-y-1 hover:shadow-2xl
-                dark:border-neutral-800 dark:bg-[#222225]
-              "
-            >
-              {/* Image */}
-              <div
+
+        {/* Empty */}
+        {!products.length ? (
+          <div className="min-h-[50vh] grid place-items-center">
+            <div className="text-center">
+              <h2
                 className="
-                  relative flex h-72 items-center justify-center
-                  overflow-hidden bg-[#f3f4f6]
-                  dark:bg-[#1c1c1f]
+                  mb-3 text-3xl
+                  font-bold
+                  text-[#1F2937]
+                  dark:text-white
+                  font-['Arvo']
                 "
               >
-                <img
-                  src={product.images?.[0] || "https://placehold.co/600x400"}
-                  alt={product.title}
-                  className="
-                    h-[90%] w-[90%] object-contain
-                    transition-transform duration-500
-                    group-hover:scale-105
-                  "
-                />
-              </div>
+                No Products Found
+              </h2>
 
-              <CardHeader className="px-6 pt-6 pb-2">
-                <CardTitle
+              <p className="text-gray-600 dark:text-gray-400">
+                Try changing filters or search keywords.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Products */}
+            <div
+              className="
+                grid gap-6
+                sm:grid-cols-2
+                xl:grid-cols-3
+              "
+            >
+              {products.map((product) => (
+                <Card
+                  key={product._id}
+                  onClick={() => navigate(`/products/item/${product._id}`)}
                   className="
-                    text-2xl font-semibold tracking-tight
-                    text-neutral-900 dark:text-neutral-100
+                    group cursor-pointer
+                    overflow-hidden
+                    rounded-[2rem]
+                    border border-gray-200
+                    bg-white
+                    shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+                    transition-all duration-300
+                    hover:-translate-y-1
+                    dark:border-[#4A4A4A]
+                    dark:bg-[#3A3A3A]
                   "
                 >
-                  {product.title}
-                </CardTitle>
-              </CardHeader>
-
-              <CardContent className="px-6 pb-6">
-                <p
-                  className="
-                    mb-5 text-sm leading-relaxed
-                    text-neutral-600 dark:text-neutral-400
-                  "
-                >
-                  {product.description?.slice(0, 80) ||
-                    "No description available"}
-                </p>
-
-                {/* Type */}
-                <div className="mb-4 flex items-center justify-between">
-                  <span
+                  {/* Image */}
+                  <div
                     className="
-                      rounded-full bg-green-100 px-3 py-1
-                      text-xs font-semibold capitalize
-                      text-green-700
-                      dark:bg-green-900/30 dark:text-green-300
+                      flex h-64 sm:h-72
+                      items-center justify-center
+                      overflow-hidden
+                      bg-[#FBFAF5]
+                      dark:bg-[#2C2C2C]
                     "
                   >
-                    {product.type}
-                  </span>
-                </div>
+                    <FallbackImage
+                      src={product.images?.[0]}
+                      alt={product.title}
+                      className="
+                        h-[90%] w-[90%]
+                        object-contain
+                        transition-transform duration-500
+                        group-hover:scale-105
+                      "
+                    />
+                  </div>
 
-                {/* Price */}
-                <div className="space-y-2 mb-6">
-                  {product.type !== "rent" && (
-                    <p className="text-2xl font-bold text-green-700 dark:text-green-400">
-                      ₹{product.price}
+                  {/* Content */}
+                  <CardHeader className="px-6 pt-6 pb-3">
+                    <CardTitle
+                      className="
+                        line-clamp-1
+                        text-2xl font-bold
+                        text-[#1F2937]
+                        dark:text-white
+                        font-['Arvo']
+                      "
+                    >
+                      {product.title}
+                    </CardTitle>
+                  </CardHeader>
+
+                  <CardContent className="px-6 pb-6">
+                    {/* Description */}
+                    <p
+                      className="
+                        mb-5 line-clamp-3
+                        text-sm leading-relaxed
+                        text-gray-600
+                        dark:text-gray-300
+                      "
+                    >
+                      {product.description?.slice(0, 100) ||
+                        "No description available"}
                     </p>
-                  )}
 
-                  {product.type !== "sale" && (
-                    <p className="text-lg font-semibold text-blue-700 dark:text-blue-400">
-                      ₹{product.pricePerHour}/hour
-                    </p>
-                  )}
-                </div>
+                    {/* Type */}
+                    <div className="mb-5">
+                      <span
+                        className="
+                          rounded-full
+                          bg-[#007200]/10
+                          px-3 py-1.5
+                          text-xs font-semibold
+                          capitalize
+                          text-[#007200]
+                        "
+                      >
+                        {product.type}
+                      </span>
+                    </div>
 
-                <button
-                  className="
-                    w-full rounded-2xl bg-green-600
-                    px-5 py-3 text-sm font-medium text-white
-                    transition-all duration-300
-                    hover:bg-green-700
-                    active:scale-[0.98]
-                  "
-                >
-                  View Details
-                </button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-    </div>
+                    {/* Pricing */}
+                    <div className="mb-6 space-y-2">
+                      {product.type !== "rent" && (
+                        <p
+                          className="
+                            text-3xl font-bold
+                            text-[#007200]
+                            dark:text-green-300
+                            font-['Arvo']
+                          "
+                        >
+                          ₹{product.price}
+                        </p>
+                      )}
+
+                      {product.type !== "sale" && (
+                        <p
+                          className="
+                            text-lg font-semibold
+                            text-gray-700
+                            dark:text-gray-300
+                          "
+                        >
+                          ₹{product.pricePerHour}/hour
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Button */}
+                    <button
+                      className="
+                        w-full cursor-pointer
+                        rounded-2xl
+                        bg-[#007200]
+                        px-5 py-3
+                        text-sm font-semibold text-white
+                        transition-all duration-300
+                        hover:bg-[#04471c]
+                      "
+                    >
+                      View Details
+                    </button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </section>
   );
 };
 

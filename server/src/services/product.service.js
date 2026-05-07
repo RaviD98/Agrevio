@@ -55,25 +55,36 @@ export const getProductsService = async ({
     };
   }
 
-  const skip = (page - 1) * limit;
+  // pagination
+  const currentPage = Number(page);
 
+  const perPage = Number(limit);
+
+  const skip = (currentPage - 1) * perPage;
+
+  // products
   const products = await findProducts({
     filter,
     skip,
-    limit: Number(limit),
+    limit: perPage,
     sort: { createdAt: -1 },
   });
 
+  // total count
   const totalProducts = await countProducts(filter);
+
+  const totalPages = Math.ceil(totalProducts / perPage);
 
   return {
     products,
-    pagination: {
-      total: totalProducts,
-      page: Number(page),
-      limit: Number(limit),
-      totalPages: Math.ceil(totalProducts / limit),
-    },
+
+    totalProducts,
+
+    totalPages,
+
+    currentPage,
+
+    limit: perPage,
   };
 };
 
