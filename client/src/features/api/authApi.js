@@ -35,10 +35,30 @@ export const authApi = createApi({
     getMe: builder.query({
       query: () => ({
         url: "http://localhost:8080/api/v1/users/me",
+
         method: "GET",
       }),
 
+      refetchOnMountOrArgChange: true,
+
       providesTags: ["Auth"],
+
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+
+          dispatch(userLoggedIn(result.data.data));
+        } catch (error) {
+          dispatch(userLoggedOut());
+        }
+      },
+    }),
+    logout: builder.mutation({
+      query: () => ({
+        url: "/logout",
+
+        method: "POST",
+      }),
     }),
   }),
 });
@@ -46,4 +66,5 @@ export const {
   useRegisterUserMutation,
   useLoginUserMutation,
   useGetMeQuery,
+  useLogoutMutation,
 } = authApi;

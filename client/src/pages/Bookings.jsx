@@ -8,6 +8,7 @@ import {
 } from "@/features/api/bookingApi";
 
 import CheckoutButton from "@/components/CheckoutButton";
+import SectionLoader from "@/components/SectionLoader";
 
 const Bookings = () => {
   const { data, isLoading, isError } = useGetBookingsQuery();
@@ -31,7 +32,7 @@ const Bookings = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading bookings...</p>
+        <SectionLoader/>
       </div>
     );
   }

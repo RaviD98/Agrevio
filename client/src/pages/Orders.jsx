@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useGetOrdersQuery } from "@/features/api/orderApi";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const Orders = () => {
   const { data, isLoading, isError } = useGetOrdersQuery();
@@ -11,7 +12,7 @@ const Orders = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading orders...</p>
+        <LoadingScreen />
       </div>
     );
   }

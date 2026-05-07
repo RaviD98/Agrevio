@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useGetProductsQuery } from "@/features/api/productApi";
+import SectionLoader from "@/components/SectionLoader";
 
 const CategoryPage = () => {
   const { category } = useParams();
@@ -28,7 +29,7 @@ const CategoryPage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading products...</p>
+        <SectionLoader />
       </div>
     );
   }

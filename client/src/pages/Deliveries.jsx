@@ -1,6 +1,7 @@
 import React from "react";
 
 import { useGetUserDeliveriesQuery } from "@/features/api/deliveryApi";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const Deliveries = () => {
   const { data, isLoading, isError } = useGetUserDeliveriesQuery();
@@ -11,7 +12,7 @@ const Deliveries = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading deliveries...</p>
+        <LoadingScreen />
       </div>
     );
   }

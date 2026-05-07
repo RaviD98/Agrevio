@@ -15,6 +15,7 @@ import { useAddToCartMutation } from "@/features/api/cartApi";
 import { useToggleFavouriteMutation } from "@/features/api/favouriteApi";
 
 import { useCreateBookingMutation } from "@/features/api/bookingApi";
+import SectionLoader from "@/components/SectionLoader";
 
 const ItemDetails = () => {
   const { productId } = useParams();
@@ -45,7 +46,7 @@ const ItemDetails = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading product...</p>
+        <SectionLoader />
       </div>
     );
   }

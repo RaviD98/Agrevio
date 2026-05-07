@@ -8,6 +8,7 @@ import {
   useGetProductByIdQuery,
   useUpdateProductMutation,
 } from "@/features/api/productApi";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const EditProduct = () => {
   const { productId } = useParams();
@@ -100,7 +101,7 @@ const EditProduct = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading product...</p>
+        <LoadingScreen />
       </div>
     );
   }
