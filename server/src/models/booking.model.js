@@ -24,10 +24,12 @@ const bookingSchema = new mongoose.Schema(
     endTime: {
       type: Date,
       required: true,
+
       validate: {
         validator: function (value) {
           return value > this.startTime;
         },
+
         message: "End time must be after start time",
       },
     },
@@ -44,13 +46,17 @@ const bookingSchema = new mongoose.Schema(
 
     bookingStatus: {
       type: String,
+
       enum: ["pending", "confirmed", "cancelled", "completed"],
+
       default: "pending",
     },
 
     paymentStatus: {
       type: String,
+
       enum: ["pending", "paid", "failed"],
+
       default: "pending",
     },
 
@@ -58,17 +64,31 @@ const bookingSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    deliveryAddress: {
+      type: String,
+      trim: true,
+    },
   },
-  { timestamps: true },
+
+  {
+    timestamps: true,
+  },
 );
 
-// Index for conflict detection
-bookingSchema.index({ product: 1, startTime: 1, endTime: 1 });
+// Conflict detection index
+bookingSchema.index({
+  product: 1,
+  startTime: 1,
+  endTime: 1,
+});
 
-// Calculate hours
+// Auto-calculate booking duration
 bookingSchema.pre("save", function (next) {
-  const diff = (this.endTime - this.startTime) / (1000 * 60 * 60);
-  this.totalHours = Math.max(1, Math.ceil(diff));
+  const diffInHours = (this.endTime - this.startTime) / (1000 * 60 * 60);
+
+  this.totalHours = Math.max(1, Math.ceil(diffInHours));
+
   next();
 });
 
