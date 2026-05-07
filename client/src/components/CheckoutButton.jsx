@@ -48,46 +48,51 @@ const CheckoutButton = ({
     }));
   };
 
-  const handleCheckout = async () => {
-    const lineItems = getLineItems();
+const handleCheckout = async () => {
+  const lineItems = getLineItems();
 
-    if (lineItems.length === 0) {
-      return alert("No items to checkout");
+  if (lineItems.length === 0) {
+    return alert("No items to checkout");
+  }
+
+  try {
+    // Mark for order creation
+    if (!singleItem) {
+      localStorage.setItem("shouldCreateOrder", "true");
     }
 
-    try {
-      const res = await fetch(
-        "http://localhost:8080/api/v1/payments/checkout-session",
-        {
-          method: "POST",
+    const res = await fetch(
+      "http://localhost:8080/api/v1/payments/checkout-session",
+      {
+        method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          credentials: "include",
-
-          body: JSON.stringify({
-            line_items: lineItems,
-          }),
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
 
-      if (!res.ok) {
-        const text = await res.text();
+        credentials: "include",
 
-        throw new Error(`Server ${res.status}: ${text}`);
-      }
+        body: JSON.stringify({
+          line_items: lineItems,
+        }),
+      },
+    );
 
-      const { url } = await res.json();
+    if (!res.ok) {
+      const text = await res.text();
 
-      window.location.href = url;
-    } catch (err) {
-      console.error("Stripe checkout error:", err);
-
-      alert("Unable to start checkout");
+      throw new Error(`Server ${res.status}: ${text}`);
     }
-  };
+
+    const { url } = await res.json();
+
+    window.location.href = url;
+  } catch (err) {
+    console.error("Stripe checkout error:", err);
+
+    alert("Unable to start checkout");
+  }
+};
 
   const isDisabled = !singleItem && cartItems.length === 0;
 
