@@ -26,6 +26,7 @@ import VendorDashboard from "./pages/VendorDashboard";
 import EditProduct from "./pages/EditProduct";
 import VendorRoute from "./components/VendorRoute";
 import Orders from "./pages/Orders";
+import Bookings from "./pages/Bookings";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -118,6 +119,14 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <Orders />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/bookings"
+        element={
+          <ProtectedRoute>
+            <Bookings />
           </ProtectedRoute>
         }
       />
