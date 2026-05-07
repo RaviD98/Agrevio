@@ -1,7 +1,14 @@
 import React from "react";
 
 import { useGetUserDeliveriesQuery } from "@/features/api/deliveryApi";
+
 import LoadingScreen from "@/components/LoadingScreen";
+
+import EmptyState from "@/components/EmptyState";
+
+import FallbackImage from "@/components/FallbackImage";
+
+import { TbTruckDelivery } from "react-icons/tb";
 
 const Deliveries = () => {
   const { data, isLoading, isError } = useGetUserDeliveriesQuery();
@@ -11,7 +18,7 @@ const Deliveries = () => {
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
         <LoadingScreen />
       </div>
     );
@@ -20,8 +27,8 @@ const Deliveries = () => {
   // Error
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Failed to load deliveries.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <p className="text-red-500 text-lg">Failed to load deliveries.</p>
       </div>
     );
   }
@@ -29,30 +36,65 @@ const Deliveries = () => {
   // Empty
   if (!deliveries.length) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#edf7f6] dark:bg-[#121212]">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-green-700 dark:text-green-300 mb-3">
-            No Deliveries Yet
-          </h1>
-
-          <p className="text-gray-600 dark:text-gray-400">
-            Your deliveries will appear here.
-          </p>
-        </div>
+      <div className="min-h-[90vh] flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <EmptyState
+          icon={<TbTruckDelivery className="text-8xl" />}
+          title="No deliveries yet"
+          description="Your deliveries will appear here."
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#edf7f6] dark:bg-[#121212] p-6">
-      <div className="max-w-6xl mx-auto">
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        px-4 py-8 md:px-6
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        font-['Manrope']
+      "
+    >
+      <div className="mx-auto max-w-6xl">
         {/* Header */}
-        <h1 className="text-4xl font-bold mb-8 text-green-700 dark:text-green-300">
-          My Deliveries
-        </h1>
+        <div className="mb-10">
+          <p
+            className="
+              mb-3 text-sm
+              font-semibold uppercase tracking-[0.2em]
+              text-[#007200]
+            "
+          >
+            Delivery Tracking
+          </p>
 
-        {/* List */}
-        <div className="space-y-8">
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-bold
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
+            My Deliveries
+          </h1>
+
+          <p
+            className="
+              mt-4 text-base
+              text-gray-600
+              dark:text-gray-300
+            "
+          >
+            Track your order and booking deliveries in one place.
+          </p>
+        </div>
+
+        {/* Delivery List */}
+        <div className="space-y-6">
           {deliveries.map((delivery) => {
             const isOrder = !!delivery.order;
 
@@ -63,76 +105,173 @@ const Deliveries = () => {
             return (
               <div
                 key={delivery._id}
-                className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-lg p-6 border dark:border-[#2A2A2A]"
+                className="
+                  rounded-[2rem]
+                  border border-gray-200
+                  bg-white
+                  p-5 md:p-7
+                  shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+                  transition-all duration-300
+                  dark:border-[#4A4A4A]
+                  dark:bg-[#3A3A3A]
+                "
               >
                 {/* Top */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <div
+                  className="
+                    flex flex-col gap-5
+                    md:flex-row md:items-start md:justify-between
+                  "
+                >
+                  {/* Left */}
                   <div>
-                    <h2 className="text-xl font-bold text-green-700 dark:text-green-300">
+                    <h2
+                      className="
+                        text-2xl font-bold
+                        text-[#007200]
+                        dark:text-green-300
+                        font-['Arvo']
+                      "
+                    >
                       Delivery #{delivery._id.slice(-6)}
                     </h2>
 
-                    <p className="text-sm text-gray-500 mt-1 capitalize">
+                    <p
+                      className="
+                        mt-2 capitalize
+                        text-sm text-gray-500
+                        dark:text-gray-400
+                      "
+                    >
                       {delivery.deliveryStatus}
                     </p>
                   </div>
 
-                  <div className="px-4 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium capitalize">
+                  {/* Type Badge */}
+                  <div
+                    className="
+                      w-fit rounded-full
+                      bg-blue-100
+                      px-4 py-1.5
+                      text-sm font-semibold
+                      text-blue-700
+                    "
+                  >
                     {isOrder ? "Order Delivery" : "Booking Delivery"}
                   </div>
                 </div>
 
                 {/* Product */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div
+                  className="
+                    mt-8 flex flex-col gap-6
+                    lg:flex-row lg:items-center lg:justify-between
+                  "
+                >
                   {/* Left */}
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={
-                        product?.images?.[0] || "https://placehold.co/120x120"
-                      }
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+                    <FallbackImage
+                      src={product?.images?.[0]}
                       alt={product?.title}
-                      className="w-24 h-24 rounded-xl object-cover"
+                      className="
+                        h-28 w-28
+                        rounded-2xl
+                        border border-gray-200
+                        object-cover
+                        dark:border-[#4A4A4A]
+                      "
                     />
 
                     <div>
-                      <h3 className="text-xl font-semibold">
+                      <h3
+                        className="
+                          text-2xl font-bold
+                          text-[#1F2937]
+                          dark:text-white
+                          font-['Arvo']
+                        "
+                      >
                         {product?.title}
                       </h3>
 
-                      <p className="text-gray-500 capitalize">
+                      <p
+                        className="
+                          mt-2 capitalize
+                          text-gray-500
+                          dark:text-gray-400
+                        "
+                      >
                         {product?.category}
                       </p>
                     </div>
                   </div>
 
                   {/* Right */}
-                  <div className="text-right">
-                    <p className="text-sm text-gray-500">Delivery Charge</p>
+                  <div
+                    className="
+                      rounded-2xl
+                      bg-[#FBFAF5]
+                      p-5
+                      dark:bg-[#2C2C2C]
+                    "
+                  >
+                    <div className="mb-4">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Delivery Charge
+                      </p>
 
-                    <p className="font-semibold text-lg mb-3">
-                      ₹{delivery.deliveryCharge}
-                    </p>
+                      <p
+                        className="
+                          mt-1 text-2xl font-bold
+                          text-[#007200]
+                          dark:text-green-300
+                          font-['Arvo']
+                        "
+                      >
+                        ₹{delivery.deliveryCharge}
+                      </p>
+                    </div>
 
-                    <p className="text-sm text-gray-500">Created</p>
+                    <div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Created At
+                      </p>
 
-                    <p className="font-medium">
-                      {new Date(delivery.createdAt).toLocaleString()}
-                    </p>
+                      <p className="mt-1 font-medium">
+                        {new Date(delivery.createdAt).toLocaleString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Address */}
-                <div className="mt-6 pt-6 border-t dark:border-[#2A2A2A]">
-                  <p className="text-sm text-gray-500 mb-2">Delivery Address</p>
+                <div
+                  className="
+                    mt-8 border-t border-gray-200
+                    pt-6
+                    dark:border-[#4A4A4A]
+                  "
+                >
+                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                    Delivery Address
+                  </p>
 
-                  <p className="font-medium">{delivery.address}</p>
+                  <p
+                    className="
+                      text-base leading-relaxed
+                      text-[#1F2937]
+                      dark:text-white
+                    "
+                  >
+                    {delivery.address}
+                  </p>
                 </div>
               </div>
             );
           })}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,12 +1,21 @@
 import React, { useState } from "react";
+
 import { Mail, User, MessageSquare } from "lucide-react";
+
 import { toast } from "sonner";
 
 const Contact = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e) => {
@@ -17,98 +26,224 @@ const Contact = () => {
       return;
     }
 
-    // Simulate successful submission
     console.log("Form submitted:", form);
+
     toast.success("Message sent successfully!");
-    setForm({ name: "", email: "", message: "" });
+
+    setForm({
+      name: "",
+      email: "",
+      message: "",
+    });
   };
 
   return (
-    <div
-      className="min-h-screen dark:bg-[#121212] bg-[#edf7f6] px-4 py-16 flex items-center justify-center"
-      
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        dark:bg-[#2C2C2C]
+        transition-colors duration-300
+        px-4 py-16
+        font-['Manrope']
+      "
     >
-      <div
-        className="max-w-3xl w-full rounded-2xl shadow-lg p-8 md:p-12 border"
-        // style={{
-        //   backgroundColor: "#ffffff",
-        //   borderColor: "#68d388",
-        // }}
-      >
-        <h2 className="text-4xl font-bold text-green-700 text-center mb-4 dark:text-green-400">
-          Contact Us
-        </h2>
-        <p className="text-gray-700 dark:text-gray-300 text-center mb-10 text-lg">
-          We'd love to hear from you! Fill out the form and we'll be in touch.
-        </p>
+      <div className="mx-auto max-w-2xl">
+        {/* Card */}
+        <div
+          className="
+            rounded-[2rem]
+            border border-gray-200
+            bg-white
+            p-6 sm:p-8 md:p-10
+            shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+            dark:border-[#4A4A4A]
+            dark:bg-[#3A3A3A]
+            dark:shadow-[0_10px_40px_rgba(0,0,0,0.25)]
+          "
+        >
+          {/* Heading */}
+          <div className="text-center">
+            <p
+              className="
+                mb-3 text-sm
+                font-semibold uppercase tracking-[0.2em]
+                text-[#007200]
+              "
+            >
+              Contact
+            </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="relative">
-            <User className="absolute top-3 left-3 text-green-600 dark:text-green-400" />
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              placeholder="Your Name"
-              className="pl-10 pr-4 py-3 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-            />
+            <h1
+              className="
+                text-4xl md:text-5xl
+                font-bold
+                text-[#007200]
+                dark:text-green-300
+                font-['Arvo']
+              "
+            >
+              Get In Touch
+            </h1>
+
+            <p
+              className="
+                mt-4 text-base leading-relaxed
+                text-gray-600 dark:text-gray-300
+              "
+            >
+              We'd love to hear from you. Send us a message and our team will
+              get back to you soon.
+            </p>
           </div>
 
-          <div className="relative">
-            <Mail className="absolute top-3 left-3 text-green-600 dark:text-green-400" />
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              placeholder="you@example.com"
-              className="pl-10 pr-4 py-3 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-            />
-          </div>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="mt-10 space-y-5">
+            {/* Name */}
+            <div className="relative">
+              <User
+                className="
+                  absolute left-4 top-1/2
+                  h-5 w-5 -translate-y-1/2
+                  text-[#007200]
+                "
+              />
 
-          <div className="relative">
-            <MessageSquare className="absolute top-3 left-3 text-green-600 dark:text-green-400" />
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              rows="5"
-              placeholder="Write your message here..."
-              className="pl-10 pr-4 py-3 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition resize-none"
-              required
-            />
-          </div>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                placeholder="Your Name"
+                className="
+                  w-full rounded-2xl
+                  border border-gray-200
+                  bg-[#FBFAF5]
+                  py-3 pl-12 pr-4
+                  text-sm text-gray-800
+                  outline-none transition-all duration-300
+                  placeholder:text-gray-400
+                  focus:border-[#007200]
+                  focus:ring-4 focus:ring-[#007200]/10
+                  dark:border-[#4A4A4A]
+                  dark:bg-[#2C2C2C]
+                  dark:text-white
+                "
+              />
+            </div>
 
-          <button
-            type="submit"
-            className="w-full text-white font-semibold py-3 rounded-lg transition duration-300 shadow-md hover:shadow-lg"
-            style={{ backgroundColor: "#68d388" }}
+            {/* Email */}
+            <div className="relative">
+              <Mail
+                className="
+                  absolute left-4 top-1/2
+                  h-5 w-5 -translate-y-1/2
+                  text-[#007200]
+                "
+              />
+
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                placeholder="you@example.com"
+                className="
+                  w-full rounded-2xl
+                  border border-gray-200
+                  bg-[#FBFAF5]
+                  py-3 pl-12 pr-4
+                  text-sm text-gray-800
+                  outline-none transition-all duration-300
+                  placeholder:text-gray-400
+                  focus:border-[#007200]
+                  focus:ring-4 focus:ring-[#007200]/10
+                  dark:border-[#4A4A4A]
+                  dark:bg-[#2C2C2C]
+                  dark:text-white
+                "
+              />
+            </div>
+
+            {/* Message */}
+            <div className="relative">
+              <MessageSquare
+                className="
+                  absolute left-4 top-4
+                  h-5 w-5
+                  text-[#007200]
+                "
+              />
+
+              <textarea
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                rows="5"
+                required
+                placeholder="Write your message..."
+                className="
+                  w-full resize-none
+                  rounded-2xl
+                  border border-gray-200
+                  bg-[#FBFAF5]
+                  py-3 pl-12 pr-4
+                  text-sm text-gray-800
+                  outline-none transition-all duration-300
+                  placeholder:text-gray-400
+                  focus:border-[#007200]
+                  focus:ring-4 focus:ring-[#007200]/10
+                  dark:border-[#4A4A4A]
+                  dark:bg-[#2C2C2C]
+                  dark:text-white
+                "
+              />
+            </div>
+
+            {/* Button */}
+            <button
+              type="submit"
+              className="
+                w-full cursor-pointer
+                rounded-2xl
+                bg-[#007200]
+                py-3.5
+                text-sm font-semibold text-white
+                transition-all duration-300
+                hover:bg-[#04471c]
+              "
+            >
+              Send Message
+            </button>
+          </form>
+
+          {/* Footer */}
+          <div
+            className="
+              mt-8 text-center
+              text-sm text-gray-500
+              dark:text-gray-400
+            "
           >
-            Send Message
-          </button>
-        </form>
-
-        <div className="mt-10 text-center text-sm text-gray-500 dark:text-gray-400">
-          Or email us directly at{" "}
-          <a
-            href="mailto:support@example.com"
-            className="text-green-600 dark:text-green-400 underline hover:text-green-800 dark:hover:text-green-300"
-          >
-            support@example.com
-          </a>
+            Or email us directly at{" "}
+            <a
+              href="mailto:support@example.com"
+              className="
+                cursor-pointer
+                font-medium
+                text-[#007200]
+                transition-colors duration-300
+                hover:text-[#04471c]
+              "
+            >
+              support@example.com
+            </a>
+          </div>
         </div>
       </div>
-
-      {/* Dark mode support */}
-      <style jsx="true">{`
-        html.dark .min-h-screen {
-          background-color: #121212;
-        }
-      `}</style>
-    </div>
+    </section>
   );
 };
 

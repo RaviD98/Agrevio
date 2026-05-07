@@ -1,7 +1,14 @@
 import React from "react";
 
 import { useGetOrdersQuery } from "@/features/api/orderApi";
-import LoadingScreen from "@/components/LoadingScreen";
+
+import EmptyState from "@/components/EmptyState";
+
+import SectionLoader from "@/components/SectionLoader";
+
+import FallbackImage from "@/components/FallbackImage";
+
+import { BsCartX } from "react-icons/bs";
 
 const Orders = () => {
   const { data, isLoading, isError } = useGetOrdersQuery();
@@ -11,8 +18,8 @@ const Orders = () => {
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingScreen />
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <SectionLoader />
       </div>
     );
   }
@@ -20,8 +27,8 @@ const Orders = () => {
   // Error
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Failed to load orders.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <p className="text-red-500 text-lg">Failed to load orders.</p>
       </div>
     );
   }
@@ -29,98 +36,224 @@ const Orders = () => {
   // Empty
   if (!orders.length) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#edf7f6] dark:bg-[#121212]">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-green-700 dark:text-green-300 mb-3">
-            No Orders Yet
-          </h1>
-
-          <p className="text-gray-600 dark:text-gray-400">
-            Your order history will appear here.
-          </p>
-        </div>
+      <div className="min-h-[90vh] flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <EmptyState
+          icon={<BsCartX className="text-8xl" />}
+          title="No orders yet"
+          description="Your purchased products will appear here."
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#edf7f6] dark:bg-[#121212] p-6">
-      <div className="max-w-6xl mx-auto">
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        px-4 py-8 md:px-6
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        font-['Manrope']
+      "
+    >
+      <div className="mx-auto max-w-6xl">
         {/* Header */}
-        <h1 className="text-4xl font-bold mb-8 text-green-700 dark:text-green-300">
-          My Orders
-        </h1>
+        <div className="mb-10">
+          <p
+            className="
+              mb-3 text-sm
+              font-semibold uppercase tracking-[0.2em]
+              text-[#007200]
+            "
+          >
+            Purchase History
+          </p>
+
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-bold
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
+            My Orders
+          </h1>
+
+          <p
+            className="
+              mt-4 text-base
+              text-gray-600
+              dark:text-gray-300
+            "
+          >
+            View all your purchased agricultural products and payment details.
+          </p>
+        </div>
 
         {/* Orders */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {orders.map((order) => (
             <div
               key={order._id}
-              className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-lg p-6 border dark:border-[#2A2A2A]"
+              className="
+                rounded-[2rem]
+                border border-gray-200
+                bg-white
+                p-5 md:p-7
+                shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+                transition-all duration-300
+                dark:border-[#4A4A4A]
+                dark:bg-[#3A3A3A]
+              "
             >
               {/* Top */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+              <div
+                className="
+                  flex flex-col gap-5
+                  md:flex-row md:items-start md:justify-between
+                "
+              >
+                {/* Left */}
                 <div>
-                  <h2 className="text-xl font-bold text-green-700 dark:text-green-300">
+                  <h2
+                    className="
+                      text-2xl font-bold
+                      text-[#007200]
+                      dark:text-green-300
+                      font-['Arvo']
+                    "
+                  >
                     Order #{order._id.slice(-6)}
                   </h2>
 
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p
+                    className="
+                      mt-2 text-sm
+                      text-gray-500
+                      dark:text-gray-400
+                    "
+                  >
                     {new Date(order.createdAt).toLocaleString()}
                   </p>
                 </div>
 
-                <div className="flex gap-4 flex-wrap">
-                  <span className="px-4 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium">
+                {/* Status */}
+                <div className="flex flex-wrap gap-3">
+                  <span
+                    className="
+                      rounded-full
+                      bg-yellow-100
+                      px-4 py-1.5
+                      text-sm font-semibold
+                      capitalize
+                      text-yellow-700
+                    "
+                  >
                     {order.status}
                   </span>
 
-                  <span className="px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+                  <span
+                    className="
+                      rounded-full
+                      bg-green-100
+                      px-4 py-1.5
+                      text-sm font-semibold
+                      text-green-700
+                    "
+                  >
                     Payment: {order.paymentStatus}
                   </span>
                 </div>
               </div>
 
               {/* Items */}
-              <div className="space-y-4">
+              <div className="mt-8 space-y-5">
                 {order.items.map((item) => (
                   <div
                     key={item.product._id}
-                    className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b dark:border-[#2A2A2A] pb-4"
+                    className="
+                      flex flex-col gap-5
+                      rounded-3xl
+                      border border-gray-200
+                      bg-[#FBFAF5]
+                      p-5
+                      transition-all duration-300
+                      sm:flex-row sm:items-center sm:justify-between
+                      dark:border-[#4A4A4A]
+                      dark:bg-[#2C2C2C]
+                    "
                   >
                     {/* Product */}
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={
-                          item.product?.images?.[0] ||
-                          "https://placehold.co/120x120"
-                        }
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+                      <FallbackImage
+                        src={item.product?.images?.[0]}
                         alt={item.product?.title}
-                        className="w-20 h-20 rounded-lg object-cover"
+                        className="
+                          h-24 w-24
+                          rounded-2xl
+                          border border-gray-200
+                          object-cover
+                          dark:border-[#4A4A4A]
+                        "
                       />
 
                       <div>
-                        <h3 className="font-semibold text-lg">
+                        <h3
+                          className="
+                            text-2xl font-bold
+                            text-[#1F2937]
+                            dark:text-white
+                            font-['Arvo']
+                          "
+                        >
                           {item.product?.title}
                         </h3>
 
-                        <p className="text-sm text-gray-500">
-                          Qty: {item.quantity}
+                        <p
+                          className="
+                            mt-2 text-sm capitalize
+                            text-gray-500
+                            dark:text-gray-400
+                          "
+                        >
+                          {item.product?.category}
                         </p>
 
-                        <p className="text-sm text-gray-500 capitalize">
-                          {item.product?.category}
+                        <p
+                          className="
+                            mt-3 text-sm
+                            text-gray-700
+                            dark:text-gray-300
+                          "
+                        >
+                          Quantity: {item.quantity}
                         </p>
                       </div>
                     </div>
 
                     {/* Price */}
-                    <div className="text-right">
-                      <p className="font-semibold text-green-700 text-lg">
+                    <div className="sm:text-right">
+                      <p
+                        className="
+                          text-3xl font-bold
+                          text-[#007200]
+                          dark:text-green-300
+                          font-['Arvo']
+                        "
+                      >
                         ₹{item.price * item.quantity}
                       </p>
 
-                      <p className="text-sm text-gray-500">
+                      <p
+                        className="
+                          mt-1 text-sm
+                          text-gray-500
+                          dark:text-gray-400
+                        "
+                      >
                         ₹{item.price} each
                       </p>
                     </div>
@@ -129,11 +262,28 @@ const Orders = () => {
               </div>
 
               {/* Total */}
-              <div className="flex justify-end mt-6">
+              <div
+                className="
+                  mt-8 flex justify-end
+                  border-t border-gray-200
+                  pt-6
+                  dark:border-[#4A4A4A]
+                "
+              >
                 <div className="text-right">
-                  <p className="text-gray-500 text-sm">Total Amount</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Total Amount
+                  </p>
 
-                  <h3 className="text-3xl font-bold text-green-700 dark:text-green-300">
+                  <h3
+                    className="
+                      mt-2 text-4xl
+                      font-bold
+                      text-[#007200]
+                      dark:text-green-300
+                      font-['Arvo']
+                    "
+                  >
                     ₹{order.totalAmount}
                   </h3>
                 </div>
@@ -142,7 +292,7 @@ const Orders = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

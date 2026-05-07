@@ -13,6 +13,7 @@ import { useLogoutMutation } from "@/features/api/authApi";
 import { useBecomeSellerMutation } from "@/features/api/userApi";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { useTheme } from "next-themes";
 
 import {
@@ -36,21 +37,27 @@ import {
   Truck,
   LayoutDashboard,
   Store,
+  Menu,
+  X,
+  Heart,
+  User,
 } from "lucide-react";
 
 const AgriNavbar = () => {
-
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
+
   const [logoutApi] = useLogoutMutation();
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [becomeSeller, { isLoading: becomingSeller }] =
     useBecomeSellerMutation();
 
-    const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   // Logout
   const handleLogout = async () => {
@@ -83,31 +90,78 @@ const AgriNavbar = () => {
   };
 
   const navLinkClass = ({ isActive }) =>
-    `transition hover:text-green-600 dark:hover:text-green-300 ${
-      isActive
-        ? "text-green-700 dark:text-green-300 font-semibold"
-        : "text-gray-700 dark:text-gray-200"
-    }`;
+    `
+      relative transition-all duration-200
+      hover:text-[#04471c]
+      dark:hover:text-green-300
+      ${
+        isActive
+          ? "text-[#007200] dark:text-green-300 font-semibold"
+          : "text-gray-700 dark:text-gray-200"
+      }
+    `;
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-green-100 dark:border-[#222] bg-white/90 dark:bg-[#121212]/95 backdrop-blur">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <nav
+      className="
+        sticky top-0 z-50
+        border-b border-gray-200
+        bg-[#FBFAF5]/90
+        backdrop-blur-xl
+        dark:border-[#3A3A3A]
+        dark:bg-[#2C2C2C]/90
+        transition-colors duration-300
+        font-['Inter']
+      "
+    >
+      <div
+        className="
+          mx-auto flex max-w-7xl
+          items-center justify-between
+          px-4 sm:px-6 py-4
+        "
+      >
         {/* Logo */}
         <div
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 cursor-pointer"
+          className="flex items-center gap-3 cursor-pointer"
         >
-          <div className="bg-green-100 dark:bg-green-900/40 p-2 rounded-xl">
-            <Leaf className="h-5 w-5 text-green-700 dark:text-green-300" />
+          <div
+            className="
+              flex h-11 w-11 items-center justify-center
+              rounded-2xl
+              bg-[#007200]/10
+            "
+          >
+            <Leaf className="h-5 w-5 text-[#007200]" />
           </div>
 
-          <h1 className="text-2xl font-bold text-green-800 dark:text-green-300">
-            Agrevio
-          </h1>
+          <div>
+            <h1
+              className="
+                text-2xl font-bold
+                text-[#007200]
+                dark:text-green-300
+                font-['Arvo']
+              "
+            >
+              Agrevio
+            </h1>
+
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Smart Agriculture
+            </p>
+          </div>
         </div>
 
-        {/* Nav Links */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+        {/* Desktop Links */}
+        <div
+          className="
+            hidden md:flex
+            items-center gap-8
+            text-sm font-medium
+          "
+        >
           <NavLink to="/" className={navLinkClass}>
             Home
           </NavLink>
@@ -126,30 +180,59 @@ const AgriNavbar = () => {
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {/* Theme */}
           <Button
             size="icon"
             variant="ghost"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-full cursor-pointer"
+            className="
+              rounded-2xl
+              border border-gray-200
+              bg-white
+              hover:bg-gray-100
+              dark:border-[#3A3A3A]
+              dark:bg-[#3A3A3A]
+              dark:hover:bg-[#444]
+              cursor-pointer
+            "
           >
             {theme === "dark" ? (
               <Sun className="h-5 w-5 text-yellow-400" />
             ) : (
-              <Moon className="h-5 w-5 text-green-700" />
+              <Moon className="h-5 w-5 text-[#007200]" />
             )}
           </Button>
 
-          {/* Logged In */}
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="
+              md:hidden
+              flex items-center justify-center
+              h-10 w-10 rounded-2xl
+              border border-gray-200
+              bg-white
+              dark:border-[#3A3A3A]
+              dark:bg-[#3A3A3A]
+            "
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
+
+          {/* User */}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className="outline-none cursor-pointer">
-                  <Avatar className="h-10 w-10 ring-2 ring-green-500 ring-offset-2 dark:ring-offset-[#121212]">
+                <div className="outline-none cursor-pointer hidden md:block">
+                  <Avatar className="h-11 w-11 ring-2 ring-[#007200]/20">
                     <AvatarImage src="" />
 
-                    <AvatarFallback className="bg-green-600 text-white">
+                    <AvatarFallback className="bg-[#007200] text-white font-semibold">
                       {user.name?.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -158,7 +241,13 @@ const AgriNavbar = () => {
 
               <DropdownMenuContent
                 align="end"
-                className="w-64 dark:bg-[#1A1A1A]"
+                className="
+                  w-64 rounded-2xl
+                  border border-gray-200
+                  bg-white
+                  dark:border-[#3A3A3A]
+                  dark:bg-[#3A3A3A]
+                "
               >
                 <DropdownMenuLabel>
                   <div className="flex flex-col">
@@ -173,6 +262,7 @@ const AgriNavbar = () => {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem onClick={() => navigate("/profile")}>
+                  <User className="mr-2 h-4 w-4" />
                   Profile
                 </DropdownMenuItem>
 
@@ -197,6 +287,7 @@ const AgriNavbar = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => navigate("/favourites")}>
+                  <Heart className="mr-2 h-4 w-4" />
                   Favourites
                 </DropdownMenuItem>
 
@@ -210,6 +301,7 @@ const AgriNavbar = () => {
                       disabled={becomingSeller}
                     >
                       <Store className="mr-2 h-4 w-4" />
+
                       {becomingSeller ? "Processing..." : "Become a Seller"}
                     </DropdownMenuItem>
                   </>
@@ -243,13 +335,66 @@ const AgriNavbar = () => {
           ) : (
             <Button
               onClick={() => navigate("/login")}
-              className="bg-green-600 hover:bg-green-700 text-white rounded-xl"
+              className="
+                hidden md:flex
+                rounded-2xl
+                bg-[#007200]
+                px-6 text-white
+                transition-all duration-300
+                hover:bg-[#04471c]
+              "
             >
               Login
             </Button>
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div
+          className="
+            md:hidden
+            border-t border-gray-200
+            bg-[#FBFAF5]
+            px-4 py-5
+            dark:border-[#3A3A3A]
+            dark:bg-[#2C2C2C]
+          "
+        >
+          <div className="flex flex-col gap-4 text-sm font-medium">
+            <NavLink to="/" className={navLinkClass}>
+              Home
+            </NavLink>
+
+            <NavLink to="/products" className={navLinkClass}>
+              Products
+            </NavLink>
+
+            <NavLink to="/about" className={navLinkClass}>
+              About
+            </NavLink>
+
+            <NavLink to="/contact" className={navLinkClass}>
+              Contact
+            </NavLink>
+
+            {!user && (
+              <Button
+                onClick={() => navigate("/login")}
+                className="
+                  mt-3 rounded-2xl
+                  bg-[#007200]
+                  text-white
+                  hover:bg-[#04471c]
+                "
+              >
+                Login
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

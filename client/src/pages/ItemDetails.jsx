@@ -2,21 +2,33 @@ import React, { useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-import { motion } from "framer-motion";
-
-import { Heart, ShoppingCart, MapPin, Package, Clock3 } from "lucide-react";
+import {
+  Heart,
+  ShoppingCart,
+  MapPin,
+  Package,
+  Clock3,
+  ArrowLeft,
+} from "lucide-react";
 
 import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
 
 import { useGetProductByIdQuery } from "@/features/api/productApi";
 
 import { useAddToCartMutation } from "@/features/api/cartApi";
 
-import { useToggleFavouriteMutation } from "@/features/api/favouriteApi";
+import {
+  useGetFavouritesQuery,
+  useToggleFavouriteMutation,
+} from "@/features/api/favouriteApi";
 
 import { useCreateBookingMutation } from "@/features/api/bookingApi";
 
 import SectionLoader from "@/components/SectionLoader";
+
+import FallbackImage from "@/components/FallbackImage";
 
 const ItemDetails = () => {
   const { productId } = useParams();
@@ -35,20 +47,26 @@ const ItemDetails = () => {
 
   const { data, isLoading, isError } = useGetProductByIdQuery(productId);
 
+  const { data: favouritesData } = useGetFavouritesQuery();
+
   const [addToCart] = useAddToCartMutation();
 
   const [toggleFavourite] = useToggleFavouriteMutation();
 
   const [createBooking] = useCreateBookingMutation();
 
-  const [isFavourite, setIsFavourite] = useState(false);
-
   const product = data?.data;
+
+  const favourites = favouritesData?.data?.products || [];
+
+  const isFavourite = favourites.some(
+    (fav) => fav._id?.toString() === product?._id?.toString(),
+  );
 
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f7f7f4] dark:bg-[#18181b]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
         <SectionLoader />
       </div>
     );
@@ -57,25 +75,11 @@ const ItemDetails = () => {
   // Error
   if (isError || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f7f7f4] dark:bg-[#18181b] text-red-500">
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C] text-red-500">
         Product not found
       </div>
     );
   }
-
-  const tapProps = {
-    whileTap: {
-      scale: 0.96,
-    },
-
-    transition: {
-      type: "spring",
-
-      stiffness: 300,
-
-      damping: 18,
-    },
-  };
 
   // Add to cart
   const handleAddToCart = async () => {
@@ -84,7 +88,6 @@ const ItemDetails = () => {
 
       await addToCart({
         productId: product._id,
-
         quantity: 1,
       }).unwrap();
 
@@ -97,11 +100,13 @@ const ItemDetails = () => {
   };
 
   // Favourite
-
-  const handleToggleFavourite = async () => {
+  const handleFavourite = async () => {
     try {
       await toggleFavourite(product._id).unwrap();
-      setIsFavourite((prev) => !prev);
+
+      toast.success(
+        isFavourite ? "Removed from favourites" : "Added to favourites",
+      );
     } catch (error) {
       toast.error(error?.data?.message || "Failed to update favourite");
     }
@@ -116,13 +121,9 @@ const ItemDetails = () => {
 
       await createBooking({
         productId: product._id,
-
         startTime,
-
         endTime,
-
         deliveryRequired,
-
         deliveryAddress,
       }).unwrap();
 
@@ -135,47 +136,70 @@ const ItemDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f7f4] dark:bg-[#18181b] text-neutral-900 dark:text-neutral-100 transition-colors duration-500 pb-36">
+    <section
+      className="
+        min-h-screen pb-36
+        bg-[#FBFAF5]
+        text-[#1F2937]
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        dark:text-[#F5F5F5]
+        font-['Manrope']
+      "
+    >
       {/* Back */}
-      <div className="max-w-7xl mx-auto px-4 pt-6">
-        <motion.button
-          {...tapProps}
+      <div className="mx-auto max-w-7xl px-4 pt-6">
+        <button
           onClick={() => navigate(-1)}
           className="
-            text-sm font-medium text-neutral-600
-            hover:text-neutral-900
-            dark:text-neutral-400 dark:hover:text-white
-            transition-colors
+            flex cursor-pointer items-center gap-2
+            text-sm font-medium
+            text-gray-600
+            transition-colors duration-300
+            hover:text-[#007200]
+            dark:text-gray-300
+            dark:hover:text-green-300
           "
         >
-          ← Back
-        </motion.button>
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </button>
       </div>
 
       {/* Main */}
-      <div className="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-2 gap-10 items-start">
-        {/* Image Section */}
+      <div
+        className="
+          mx-auto grid max-w-7xl
+          gap-8 px-4 py-8
+          lg:grid-cols-2
+        "
+      >
+        {/* Image */}
         <div
           className="
-            rounded-3xl border border-neutral-200
-            bg-white shadow-sm overflow-hidden
-            dark:border-neutral-800 dark:bg-[#222225]
+            overflow-hidden rounded-[2rem]
+            border border-gray-200
+            bg-white
+            shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+            dark:border-[#4A4A4A]
+            dark:bg-[#3A3A3A]
           "
         >
           <div
             className="
-              h-[420px] md:h-[520px]
-              flex items-center justify-center
-              bg-[#f3f4f6] dark:bg-[#1b1b1d]
+              flex h-[350px] sm:h-[450px] md:h-[520px]
+              items-center justify-center
+              bg-[#F5F5F5]
+              dark:bg-[#2C2C2C]
             "
           >
-            <img
-              src={product.images?.[0] || "https://placehold.co/600x400"}
+            <FallbackImage
+              src={product.images?.[0]}
               alt={product.title}
               className="
-                w-[90%] h-[90%]
+                h-[90%] w-[90%]
                 object-contain
-                transition-transform duration-500
+                transition-transform duration-300
                 hover:scale-105
               "
             />
@@ -185,19 +209,25 @@ const ItemDetails = () => {
         {/* Details */}
         <div
           className="
-            rounded-3xl border border-neutral-200
-            bg-white p-6 md:p-8 shadow-sm
-            dark:border-neutral-800 dark:bg-[#222225]
+            rounded-[2rem]
+            border border-gray-200
+            bg-white
+            p-6 md:p-8
+            shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+            dark:border-[#4A4A4A]
+            dark:bg-[#3A3A3A]
           "
         >
-          {/* Badge */}
+          {/* Tags */}
           <div className="mb-5 flex flex-wrap gap-3">
             <span
               className="
-                rounded-full bg-green-100
-                px-4 py-1 text-sm font-semibold
-                text-green-700
-                dark:bg-green-900/30 dark:text-green-300
+                rounded-full
+                bg-[#007200]/10
+                px-4 py-1.5
+                text-sm font-semibold
+                capitalize
+                text-[#007200]
               "
             >
               {product.type}
@@ -205,10 +235,14 @@ const ItemDetails = () => {
 
             <span
               className="
-                rounded-full bg-neutral-100
-                px-4 py-1 text-sm font-medium
-                text-neutral-700
-                dark:bg-neutral-800 dark:text-neutral-300
+                rounded-full
+                bg-gray-100
+                px-4 py-1.5
+                text-sm font-medium
+                capitalize
+                text-gray-700
+                dark:bg-[#2C2C2C]
+                dark:text-gray-300
               "
             >
               {product.category}
@@ -216,88 +250,139 @@ const ItemDetails = () => {
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-5">
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-bold leading-tight
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
             {product.title}
           </h1>
 
           {/* Description */}
-          <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed text-lg mb-8">
+          <p
+            className="
+              mt-5 text-base leading-relaxed
+              text-gray-600
+              dark:text-gray-300
+            "
+          >
             {product.description}
           </p>
 
-          {/* Info Cards */}
-          <div className="grid sm:grid-cols-2 gap-4 mb-8">
+          {/* Info */}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <div
               className="
-                rounded-2xl border border-neutral-200
-                bg-[#fafaf9] p-4
-                dark:border-neutral-800 dark:bg-[#1c1c1f]
+                rounded-2xl
+                border border-gray-200
+                bg-[#FBFAF5]
+                p-4
+                dark:border-[#4A4A4A]
+                dark:bg-[#2C2C2C]
               "
             >
-              <div className="flex items-center gap-3 mb-2">
-                <Package className="h-5 w-5 text-green-600" />
+              <div className="mb-2 flex items-center gap-2">
+                <Package className="h-5 w-5 text-[#007200]" />
+
                 <p className="font-semibold">Category</p>
               </div>
 
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 capitalize">
+              <p className="text-sm capitalize text-gray-600 dark:text-gray-300">
                 {product.category}
               </p>
             </div>
 
             <div
               className="
-                rounded-2xl border border-neutral-200
-                bg-[#fafaf9] p-4
-                dark:border-neutral-800 dark:bg-[#1c1c1f]
+                rounded-2xl
+                border border-gray-200
+                bg-[#FBFAF5]
+                p-4
+                dark:border-[#4A4A4A]
+                dark:bg-[#2C2C2C]
               "
             >
-              <div className="flex items-center gap-3 mb-2">
-                <MapPin className="h-5 w-5 text-green-600" />
+              <div className="mb-2 flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-[#007200]" />
+
                 <p className="font-semibold">Location</p>
               </div>
 
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
                 {product.location}
               </p>
             </div>
           </div>
 
           {/* Pricing */}
-          <div className="mb-8 space-y-3">
+          <div className="mt-8 space-y-5">
             {product.type !== "rent" && (
               <div>
-                <p className="text-sm text-neutral-500 mb-1">Purchase Price</p>
+                <p className="text-sm text-gray-500">Purchase Price</p>
 
-                <p className="text-4xl font-bold text-green-700 dark:text-green-400">
+                <h2
+                  className="
+                    mt-1 text-4xl
+                    font-bold
+                    text-[#007200]
+                    dark:text-green-300
+                    font-['Arvo']
+                  "
+                >
                   ₹{product.price}
-                </p>
+                </h2>
               </div>
             )}
 
             {product.type !== "sale" && (
               <div>
-                <p className="text-sm text-neutral-500 mb-1">Rental Price</p>
+                <p className="text-sm text-gray-500">Rental Price</p>
 
-                <p className="text-3xl font-bold text-blue-700 dark:text-blue-400">
+                <h2
+                  className="
+                    mt-1 text-3xl
+                    font-bold
+                    text-[#007200]
+                    dark:text-green-300
+                    font-['Arvo']
+                  "
+                >
                   ₹{product.pricePerHour}/hour
-                </p>
+                </h2>
               </div>
             )}
           </div>
 
-          {/* Booking UI */}
+          {/* Booking */}
           {product.type !== "sale" && (
-            <div className="border-t border-neutral-200 dark:border-neutral-800 pt-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Clock3 className="h-6 w-6 text-blue-600" />
+            <div
+              className="
+                mt-10 border-t border-gray-200
+                pt-8
+                dark:border-[#4A4A4A]
+              "
+            >
+              <div className="mb-6 flex items-center gap-3">
+                <Clock3 className="h-6 w-6 text-[#007200]" />
 
-                <h2 className="text-2xl font-bold">Book Product</h2>
+                <h2
+                  className="
+                    text-2xl font-bold
+                    font-['Arvo']
+                  "
+                >
+                  Book Product
+                </h2>
               </div>
 
               <div className="space-y-5">
                 {/* Start */}
                 <div>
-                  <label className="block mb-2 text-sm font-medium">
+                  <label className="mb-2 block text-sm font-medium">
                     Start Time
                   </label>
 
@@ -306,19 +391,22 @@ const ItemDetails = () => {
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
                     className="
-                      w-full rounded-2xl border border-neutral-200
-                      bg-[#fafaf9] px-4 py-3
-                      outline-none transition-all
-                      focus:border-blue-500 focus:ring-4 focus:ring-blue-100
-                      dark:border-neutral-700 dark:bg-[#1b1b1d]
-                      dark:focus:ring-blue-900/30
+                      w-full rounded-2xl
+                      border border-gray-200
+                      bg-[#FBFAF5]
+                      px-4 py-3
+                      outline-none transition-all duration-300
+                      focus:border-[#007200]
+                      focus:ring-4 focus:ring-[#007200]/10
+                      dark:border-[#4A4A4A]
+                      dark:bg-[#2C2C2C]
                     "
                   />
                 </div>
 
                 {/* End */}
                 <div>
-                  <label className="block mb-2 text-sm font-medium">
+                  <label className="mb-2 block text-sm font-medium">
                     End Time
                   </label>
 
@@ -327,12 +415,15 @@ const ItemDetails = () => {
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
                     className="
-                      w-full rounded-2xl border border-neutral-200
-                      bg-[#fafaf9] px-4 py-3
-                      outline-none transition-all
-                      focus:border-blue-500 focus:ring-4 focus:ring-blue-100
-                      dark:border-neutral-700 dark:bg-[#1b1b1d]
-                      dark:focus:ring-blue-900/30
+                      w-full rounded-2xl
+                      border border-gray-200
+                      bg-[#FBFAF5]
+                      px-4 py-3
+                      outline-none transition-all duration-300
+                      focus:border-[#007200]
+                      focus:ring-4 focus:ring-[#007200]/10
+                      dark:border-[#4A4A4A]
+                      dark:bg-[#2C2C2C]
                     "
                   />
                 </div>
@@ -343,7 +434,7 @@ const ItemDetails = () => {
                     type="checkbox"
                     checked={deliveryRequired}
                     onChange={(e) => setDeliveryRequired(e.target.checked)}
-                    className="h-4 w-4"
+                    className="h-4 w-4 accent-[#007200]"
                   />
 
                   <label className="text-sm font-medium">
@@ -358,25 +449,30 @@ const ItemDetails = () => {
                     value={deliveryAddress}
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     className="
-                      w-full rounded-2xl border border-neutral-200
-                      bg-[#fafaf9] px-4 py-3
-                      outline-none transition-all
-                      focus:border-blue-500 focus:ring-4 focus:ring-blue-100
-                      dark:border-neutral-700 dark:bg-[#1b1b1d]
-                      dark:text-white dark:focus:ring-blue-900/30
+                      w-full rounded-2xl
+                      border border-gray-200
+                      bg-[#FBFAF5]
+                      px-4 py-3
+                      outline-none transition-all duration-300
+                      focus:border-[#007200]
+                      focus:ring-4 focus:ring-[#007200]/10
+                      dark:border-[#4A4A4A]
+                      dark:bg-[#2C2C2C]
                     "
                   />
                 )}
 
-                {/* Book */}
+                {/* Button */}
                 <button
                   onClick={handleBooking}
                   className="
-                    w-full rounded-2xl bg-blue-600
-                    py-3 font-semibold text-white
+                    w-full cursor-pointer
+                    rounded-2xl
+                    bg-[#007200]
+                    py-3.5
+                    font-semibold text-white
                     transition-all duration-300
-                    hover:bg-blue-700
-                    active:scale-[0.99]
+                    hover:bg-[#04471c]
                   "
                 >
                   Book Now
@@ -391,79 +487,68 @@ const ItemDetails = () => {
       <div
         className="
           fixed bottom-0 left-0 z-50 w-full
-          border-t border-neutral-200
+          border-t border-gray-200
           bg-white/90 backdrop-blur-xl
-          dark:border-neutral-800 dark:bg-[#18181b]/90
+          dark:border-[#4A4A4A]
+          dark:bg-[#2C2C2C]/90
         "
       >
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-center gap-4">
+        <div
+          className="
+            mx-auto flex max-w-7xl
+            flex-wrap items-center justify-center
+            gap-4 px-4 py-4
+          "
+        >
           {/* Cart */}
           {product.type !== "rent" && (
-            <motion.button
-              {...tapProps}
+            <button
               disabled={adding}
+              onClick={handleAddToCart}
               className="
-                flex items-center gap-2 rounded-2xl
-                bg-green-600 px-6 py-3
+                flex cursor-pointer items-center gap-2
+                rounded-2xl
+                bg-[#007200]
+                px-6 py-3
                 font-medium text-white
                 transition-all duration-300
-                hover:bg-green-700
+                hover:bg-[#04471c]
                 disabled:opacity-60
               "
-              onClick={handleAddToCart}
             >
               <ShoppingCart className="h-5 w-5" />
 
               {adding ? "Adding..." : "Add to Cart"}
-            </motion.button>
+            </button>
           )}
 
           {/* Favourite */}
-          {/* Favourite */}
-          <button
-            onClick={handleToggleFavourite}
-            className="
-    flex items-center gap-2 rounded-2xl
-    border border-neutral-200
-    bg-white px-6 py-3
-    font-medium transition-all duration-300
-    hover:bg-green-50
-    dark:border-neutral-700 dark:bg-[#222225]
-    dark:hover:bg-green-900/20
-  "
+          <Button
+            onClick={handleFavourite}
+            className={`
+              cursor-pointer rounded-2xl
+              border px-6 py-3
+              font-medium transition-all duration-300
+              ${
+                isFavourite
+                  ? "border-[#007200] bg-[#007200] text-white hover:bg-[#04471c]"
+                  : "border-gray-300 bg-white text-black hover:bg-gray-100 dark:border-[#4A4A4A] dark:bg-[#3A3A3A] dark:text-white"
+              }
+            `}
           >
             <Heart
               className={`
-      h-5 w-5 transition-all duration-300
-      ${
-        isFavourite
-          ? "fill-green-500 text-green-500"
-          : "text-neutral-500 dark:text-neutral-400"
-      }
-    `}
+                mr-2 h-4 w-4 transition-all
+                ${isFavourite ? "fill-white text-white" : ""}
+              `}
             />
 
-            <span
-              className={`
-      transition-colors duration-300
-      ${isFavourite ? "text-green-600 dark:text-green-400" : ""}
-    `}
-            >
-              Favourite
-            </span>
-          </button>
+            {isFavourite ? "Favourited" : "Favourite"}
+          </Button>
 
           {/* Buy */}
           {product.type !== "rent" && (
-            <motion.button
-              {...tapProps}
-              className="
-                rounded-2xl bg-neutral-900
-                px-6 py-3 font-medium text-white
-                transition-all duration-300
-                hover:bg-black
-                dark:bg-white dark:text-black
-              "
+            <button
               onClick={() =>
                 navigate("/payment", {
                   state: {
@@ -471,13 +556,23 @@ const ItemDetails = () => {
                   },
                 })
               }
+              className="
+                cursor-pointer rounded-2xl
+                border border-[#007200]
+                bg-transparent
+                px-6 py-3
+                font-medium text-[#007200]
+                transition-all duration-300
+                hover:bg-[#007200]
+                hover:text-white
+              "
             >
               Buy Now
-            </motion.button>
+            </button>
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

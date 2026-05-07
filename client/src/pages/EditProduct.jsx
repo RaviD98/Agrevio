@@ -8,6 +8,7 @@ import {
   useGetProductByIdQuery,
   useUpdateProductMutation,
 } from "@/features/api/productApi";
+
 import LoadingScreen from "@/components/LoadingScreen";
 
 const EditProduct = () => {
@@ -100,7 +101,7 @@ const EditProduct = () => {
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
         <LoadingScreen />
       </div>
     );
@@ -109,23 +110,79 @@ const EditProduct = () => {
   // Error
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500">Failed to load product.</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <p className="text-red-500 text-lg">Failed to load product.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#edf7f6] dark:bg-[#121212] py-10 px-4">
-      <div className="max-w-3xl mx-auto bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-8 text-green-700 dark:text-green-300">
-          Edit Product
-        </h1>
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        px-4 py-10
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        font-['Manrope']
+      "
+    >
+      <div
+        className="
+          mx-auto max-w-3xl
+          rounded-[2rem]
+          border border-gray-200
+          bg-white
+          p-6 sm:p-8 md:p-10
+          shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+          dark:border-[#4A4A4A]
+          dark:bg-[#3A3A3A]
+        "
+      >
+        {/* Header */}
+        <div className="mb-10">
+          <p
+            className="
+              mb-3 text-sm
+              font-semibold uppercase tracking-[0.2em]
+              text-[#007200]
+            "
+          >
+            Vendor Panel
+          </p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-bold
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
+            Edit Product
+          </h1>
+
+          <p
+            className="
+              mt-4 text-base
+              leading-relaxed
+              text-gray-600
+              dark:text-gray-300
+            "
+          >
+            Update your agricultural product details and keep your listings
+            accurate for customers.
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
           <div>
-            <label className="block mb-2 font-medium">Title</label>
+            <label className="mb-2 block text-sm font-semibold">
+              Product Title
+            </label>
 
             <input
               type="text"
@@ -133,151 +190,320 @@ const EditProduct = () => {
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-lg border dark:bg-[#121212]"
+              className="
+                w-full rounded-2xl
+                border border-gray-200
+                bg-[#FBFAF5]
+                px-4 py-3
+                text-sm
+                outline-none transition-all duration-300
+                focus:border-[#007200]
+                focus:ring-4 focus:ring-[#007200]/10
+                dark:border-[#4A4A4A]
+                dark:bg-[#2C2C2C]
+                dark:text-white
+              "
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block mb-2 font-medium">Description</label>
+            <label className="mb-2 block text-sm font-semibold">
+              Description
+            </label>
 
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              rows="4"
-              className="w-full p-3 rounded-lg border dark:bg-[#121212]"
+              rows="5"
+              className="
+                w-full resize-none rounded-2xl
+                border border-gray-200
+                bg-[#FBFAF5]
+                px-4 py-3
+                text-sm
+                outline-none transition-all duration-300
+                focus:border-[#007200]
+                focus:ring-4 focus:ring-[#007200]/10
+                dark:border-[#4A4A4A]
+                dark:bg-[#2C2C2C]
+                dark:text-white
+              "
             />
           </div>
 
-          {/* Category */}
-          <div>
-            <label className="block mb-2 font-medium">Category</label>
+          {/* Category + Type */}
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Category */}
+            <div>
+              <label className="mb-2 block text-sm font-semibold">
+                Category
+              </label>
 
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-              className="w-full p-3 rounded-lg border dark:bg-[#121212]"
-            >
-              <option value="">Select Category</option>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                className="
+                  w-full cursor-pointer rounded-2xl
+                  border border-gray-200
+                  bg-[#FBFAF5]
+                  px-4 py-3
+                  text-sm
+                  outline-none transition-all duration-300
+                  focus:border-[#007200]
+                  focus:ring-4 focus:ring-[#007200]/10
+                  dark:border-[#4A4A4A]
+                  dark:bg-[#2C2C2C]
+                  dark:text-white
+                "
+              >
+                <option value="">Select Category</option>
 
-              <option value="seeds">Seeds</option>
+                <option value="seeds">Seeds</option>
 
-              <option value="irrigation">Irrigation</option>
+                <option value="irrigation">Irrigation</option>
 
-              <option value="machinery">Machinery</option>
+                <option value="machinery">Machinery</option>
 
-              <option value="tools">Tools</option>
+                <option value="tools">Tools</option>
 
-              <option value="fertilizers">Fertilizers</option>
+                <option value="fertilizers">Fertilizers</option>
 
-              <option value="pesticides">Pesticides</option>
+                <option value="pesticides">Pesticides</option>
 
-              <option value="greenhouse">Greenhouse</option>
+                <option value="greenhouse">Greenhouse</option>
 
-              <option value="feed">Animal Feed</option>
+                <option value="feed">Animal Feed</option>
 
-              <option value="storage">Storage</option>
-            </select>
+                <option value="storage">Storage</option>
+              </select>
+            </div>
+
+            {/* Type */}
+            <div>
+              <label className="mb-2 block text-sm font-semibold">
+                Product Type
+              </label>
+
+              <select
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                className="
+                  w-full cursor-pointer rounded-2xl
+                  border border-gray-200
+                  bg-[#FBFAF5]
+                  px-4 py-3
+                  text-sm
+                  outline-none transition-all duration-300
+                  focus:border-[#007200]
+                  focus:ring-4 focus:ring-[#007200]/10
+                  dark:border-[#4A4A4A]
+                  dark:bg-[#2C2C2C]
+                  dark:text-white
+                "
+              >
+                <option value="sale">Sale</option>
+
+                <option value="rent">Rent</option>
+
+                <option value="both">Both</option>
+              </select>
+            </div>
           </div>
 
-          {/* Type */}
-          <div>
-            <label className="block mb-2 font-medium">Type</label>
-
-            <select
-              name="type"
-              value={formData.type}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg border dark:bg-[#121212]"
-            >
-              <option value="sale">Sale</option>
-
-              <option value="rent">Rent</option>
-
-              <option value="both">Both</option>
-            </select>
-          </div>
-
-          {/* Sale */}
+          {/* Sale Fields */}
           {(formData.type === "sale" || formData.type === "both") && (
-            <>
-              <input
-                type="number"
-                name="price"
-                placeholder="Price"
-                value={formData.price}
-                onChange={handleChange}
-                className="w-full p-3 rounded-lg border dark:bg-[#121212]"
-              />
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block text-sm font-semibold">
+                  Price
+                </label>
 
-              <input
-                type="number"
-                name="stock"
-                placeholder="Stock"
-                value={formData.stock}
-                onChange={handleChange}
-                className="w-full p-3 rounded-lg border dark:bg-[#121212]"
-              />
-            </>
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  className="
+                    w-full rounded-2xl
+                    border border-gray-200
+                    bg-[#FBFAF5]
+                    px-4 py-3
+                    text-sm
+                    outline-none transition-all duration-300
+                    focus:border-[#007200]
+                    focus:ring-4 focus:ring-[#007200]/10
+                    dark:border-[#4A4A4A]
+                    dark:bg-[#2C2C2C]
+                    dark:text-white
+                  "
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold">
+                  Stock
+                </label>
+
+                <input
+                  type="number"
+                  name="stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  className="
+                    w-full rounded-2xl
+                    border border-gray-200
+                    bg-[#FBFAF5]
+                    px-4 py-3
+                    text-sm
+                    outline-none transition-all duration-300
+                    focus:border-[#007200]
+                    focus:ring-4 focus:ring-[#007200]/10
+                    dark:border-[#4A4A4A]
+                    dark:bg-[#2C2C2C]
+                    dark:text-white
+                  "
+                />
+              </div>
+            </div>
           )}
 
-          {/* Rent */}
+          {/* Rent Fields */}
           {(formData.type === "rent" || formData.type === "both") && (
-            <>
-              <input
-                type="number"
-                name="pricePerHour"
-                placeholder="Price Per Hour"
-                value={formData.pricePerHour}
-                onChange={handleChange}
-                className="w-full p-3 rounded-lg border dark:bg-[#121212]"
-              />
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block text-sm font-semibold">
+                  Price Per Hour
+                </label>
 
-              <input
-                type="number"
-                name="securityDeposit"
-                placeholder="Security Deposit"
-                value={formData.securityDeposit}
-                onChange={handleChange}
-                className="w-full p-3 rounded-lg border dark:bg-[#121212]"
-              />
-            </>
+                <input
+                  type="number"
+                  name="pricePerHour"
+                  value={formData.pricePerHour}
+                  onChange={handleChange}
+                  className="
+                    w-full rounded-2xl
+                    border border-gray-200
+                    bg-[#FBFAF5]
+                    px-4 py-3
+                    text-sm
+                    outline-none transition-all duration-300
+                    focus:border-[#007200]
+                    focus:ring-4 focus:ring-[#007200]/10
+                    dark:border-[#4A4A4A]
+                    dark:bg-[#2C2C2C]
+                    dark:text-white
+                  "
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-semibold">
+                  Security Deposit
+                </label>
+
+                <input
+                  type="number"
+                  name="securityDeposit"
+                  value={formData.securityDeposit}
+                  onChange={handleChange}
+                  className="
+                    w-full rounded-2xl
+                    border border-gray-200
+                    bg-[#FBFAF5]
+                    px-4 py-3
+                    text-sm
+                    outline-none transition-all duration-300
+                    focus:border-[#007200]
+                    focus:ring-4 focus:ring-[#007200]/10
+                    dark:border-[#4A4A4A]
+                    dark:bg-[#2C2C2C]
+                    dark:text-white
+                  "
+                />
+              </div>
+            </div>
           )}
 
           {/* Location */}
-          <input
-            type="text"
-            name="location"
-            placeholder="Location"
-            value={formData.location}
-            onChange={handleChange}
-            className="w-full p-3 rounded-lg border dark:bg-[#121212]"
-          />
+          <div>
+            <label className="mb-2 block text-sm font-semibold">Location</label>
+
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              className="
+                w-full rounded-2xl
+                border border-gray-200
+                bg-[#FBFAF5]
+                px-4 py-3
+                text-sm
+                outline-none transition-all duration-300
+                focus:border-[#007200]
+                focus:ring-4 focus:ring-[#007200]/10
+                dark:border-[#4A4A4A]
+                dark:bg-[#2C2C2C]
+                dark:text-white
+              "
+            />
+          </div>
 
           {/* Images */}
-          <input
-            type="text"
-            name="images"
-            placeholder="Comma separated image URLs"
-            value={formData.images}
-            onChange={handleChange}
-            className="w-full p-3 rounded-lg border dark:bg-[#121212]"
-          />
+          <div>
+            <label className="mb-2 block text-sm font-semibold">
+              Image URLs
+            </label>
+
+            <input
+              type="text"
+              name="images"
+              placeholder="Comma separated image URLs"
+              value={formData.images}
+              onChange={handleChange}
+              className="
+                w-full rounded-2xl
+                border border-gray-200
+                bg-[#FBFAF5]
+                px-4 py-3
+                text-sm
+                outline-none transition-all duration-300
+                placeholder:text-gray-400
+                focus:border-[#007200]
+                focus:ring-4 focus:ring-[#007200]/10
+                dark:border-[#4A4A4A]
+                dark:bg-[#2C2C2C]
+                dark:text-white
+              "
+            />
+          </div>
 
           {/* Submit */}
           <button
             type="submit"
             disabled={isUpdating}
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold"
+            className="
+              w-full cursor-pointer
+              rounded-2xl
+              bg-[#007200]
+              py-3.5
+              text-sm font-semibold text-white
+              transition-all duration-300
+              hover:bg-[#04471c]
+              disabled:cursor-not-allowed
+              disabled:opacity-70
+            "
           >
             {isUpdating ? "Updating..." : "Update Product"}
           </button>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 

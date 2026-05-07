@@ -8,7 +8,14 @@ import {
 } from "@/features/api/bookingApi";
 
 import CheckoutButton from "@/components/CheckoutButton";
+
 import SectionLoader from "@/components/SectionLoader";
+
+import EmptyState from "@/components/EmptyState";
+
+import FallbackImage from "@/components/FallbackImage";
+
+import { PiPhoneX } from "react-icons/pi";
 
 const Bookings = () => {
   const { data, isLoading, isError } = useGetBookingsQuery();
@@ -31,8 +38,8 @@ const Bookings = () => {
   // Loading
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <SectionLoader/>
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <SectionLoader />
       </div>
     );
   }
@@ -40,7 +47,7 @@ const Bookings = () => {
   // Error
   if (isError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
         <p className="text-red-500">Failed to load bookings.</p>
       </div>
     );
@@ -49,122 +56,262 @@ const Bookings = () => {
   // Empty
   if (!bookings.length) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#edf7f6] dark:bg-[#121212]">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-blue-700 dark:text-blue-300 mb-3">
-            No Bookings Yet
-          </h1>
-
-          <p className="text-gray-600 dark:text-gray-400">
-            Your rental bookings will appear here.
-          </p>
-        </div>
+      <div className="min-h-[90vh] flex items-center justify-center bg-[#FBFAF5] dark:bg-[#2C2C2C]">
+        <EmptyState
+          icon={<PiPhoneX className="text-8xl" />}
+          title="No bookings yet"
+          description="Your rental bookings will appear here."
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#edf7f6] dark:bg-[#121212] p-6">
-      <div className="max-w-6xl mx-auto">
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        px-4 py-8 md:px-6
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        font-['Manrope']
+      "
+    >
+      <div className="mx-auto max-w-6xl">
         {/* Header */}
-        <h1 className="text-4xl font-bold mb-8 text-blue-700 dark:text-blue-300">
-          My Bookings
-        </h1>
+        <div className="mb-10">
+          <p
+            className="
+              mb-3 text-sm
+              font-semibold uppercase tracking-[0.2em]
+              text-[#007200]
+            "
+          >
+            Rentals
+          </p>
+
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-bold
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
+            My Bookings
+          </h1>
+
+          <p
+            className="
+              mt-4 text-base
+              text-gray-600
+              dark:text-gray-300
+            "
+          >
+            Track your rented products, booking duration, and payment status.
+          </p>
+        </div>
 
         {/* List */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {bookings.map((booking) => (
             <div
               key={booking._id}
-              className="bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-lg p-6 border dark:border-[#2A2A2A]"
+              className="
+                rounded-[2rem]
+                border border-gray-200
+                bg-white
+                p-5 md:p-7
+                shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+                transition-all duration-300
+                dark:border-[#4A4A4A]
+                dark:bg-[#3A3A3A]
+              "
             >
               {/* Top */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+              <div
+                className="
+                  flex flex-col gap-5
+                  md:flex-row md:items-start md:justify-between
+                "
+              >
+                {/* Left */}
                 <div>
-                  <h2 className="text-xl font-bold text-blue-700 dark:text-blue-300">
+                  <h2
+                    className="
+                      text-2xl font-bold
+                      text-[#007200]
+                      dark:text-green-300
+                      font-['Arvo']
+                    "
+                  >
                     Booking #{booking._id.slice(-6)}
                   </h2>
 
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     {new Date(booking.createdAt).toLocaleString()}
                   </p>
                 </div>
 
-                <div className="flex gap-4 flex-wrap">
-                  <span className="px-4 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium capitalize">
+                {/* Status */}
+                <div className="flex flex-wrap gap-3">
+                  <span
+                    className="
+                      rounded-full
+                      bg-yellow-100
+                      px-4 py-1.5
+                      text-sm font-semibold
+                      capitalize
+                      text-yellow-700
+                    "
+                  >
                     {booking.bookingStatus}
                   </span>
 
-                  <span className="px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium capitalize">
+                  <span
+                    className="
+                      rounded-full
+                      bg-green-100
+                      px-4 py-1.5
+                      text-sm font-semibold
+                      capitalize
+                      text-green-700
+                    "
+                  >
                     Payment: {booking.paymentStatus}
                   </span>
                 </div>
               </div>
 
               {/* Product */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div
+                className="
+                  mt-8 flex flex-col gap-6
+                  lg:flex-row lg:items-center lg:justify-between
+                "
+              >
                 {/* Left */}
-                <div className="flex items-center gap-4">
-                  <img
-                    src={
-                      booking.product?.images?.[0] ||
-                      "https://placehold.co/120x120"
-                    }
+                <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+                  <FallbackImage
+                    src={booking.product?.images?.[0]}
                     alt={booking.product?.title}
-                    className="w-24 h-24 rounded-xl object-cover"
+                    className="
+                      h-28 w-28
+                      rounded-2xl
+                      object-cover
+                      border border-gray-200
+                      dark:border-[#4A4A4A]
+                    "
                   />
 
                   <div>
-                    <h3 className="text-xl font-semibold">
+                    <h3
+                      className="
+                        text-2xl font-bold
+                        text-[#1F2937]
+                        dark:text-white
+                        font-['Arvo']
+                      "
+                    >
                       {booking.product?.title}
                     </h3>
 
-                    <p className="text-gray-500 capitalize">
+                    <p
+                      className="
+                        mt-2 capitalize
+                        text-gray-500
+                        dark:text-gray-400
+                      "
+                    >
                       {booking.product?.category}
                     </p>
 
-                    <p className="text-blue-700 font-medium">
-                      ₹{booking.product?.pricePerHour}
-                      /hour
+                    <p
+                      className="
+                        mt-3 text-lg font-semibold
+                        text-[#007200]
+                        dark:text-green-300
+                      "
+                    >
+                      ₹{booking.product?.pricePerHour}/hour
                     </p>
                   </div>
                 </div>
 
                 {/* Right */}
-                <div className="text-right">
-                  <p className="text-sm text-gray-500">Start</p>
+                <div
+                  className="
+                    rounded-2xl
+                    bg-[#FBFAF5]
+                    p-5
+                    dark:bg-[#2C2C2C]
+                  "
+                >
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Start Time
+                    </p>
 
-                  <p className="font-medium mb-3">
-                    {new Date(booking.startTime).toLocaleString()}
-                  </p>
+                    <p className="mt-1 font-medium">
+                      {new Date(booking.startTime).toLocaleString()}
+                    </p>
+                  </div>
 
-                  <p className="text-sm text-gray-500">End</p>
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      End Time
+                    </p>
 
-                  <p className="font-medium">
-                    {new Date(booking.endTime).toLocaleString()}
-                  </p>
+                    <p className="mt-1 font-medium">
+                      {new Date(booking.endTime).toLocaleString()}
+                    </p>
+                  </div>
                 </div>
               </div>
 
               {/* Bottom */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-6 pt-6 border-t dark:border-[#2A2A2A] gap-4">
-                <div>
-                  <p className="text-gray-500 text-sm">Total Hours</p>
+              <div
+                className="
+                  mt-8 flex flex-col gap-5
+                  border-t border-gray-200
+                  pt-6
+                  lg:flex-row lg:items-center lg:justify-between
+                  dark:border-[#4A4A4A]
+                "
+              >
+                {/* Info */}
+                <div className="flex flex-wrap gap-8">
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Total Hours
+                    </p>
 
-                  <p className="font-semibold text-lg">
-                    {booking.totalHours} hrs
-                  </p>
+                    <p className="mt-1 text-lg font-semibold">
+                      {booking.totalHours} hrs
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Total Amount
+                    </p>
+
+                    <h3
+                      className="
+                        mt-1 text-3xl font-bold
+                        text-[#007200]
+                        dark:text-green-300
+                        font-['Arvo']
+                      "
+                    >
+                      ₹{booking.totalAmount}
+                    </h3>
+                  </div>
                 </div>
 
-                <div>
-                  <p className="text-gray-500 text-sm">Total Amount</p>
-
-                  <h3 className="text-3xl font-bold text-blue-700 dark:text-blue-300">
-                    ₹{booking.totalAmount}
-                  </h3>
-                </div>
-
-                <div className="flex gap-3 flex-wrap">
+                {/* Actions */}
+                <div className="flex flex-wrap gap-3">
                   {/* Pay */}
                   {booking.paymentStatus === "pending" &&
                     booking.bookingStatus !== "cancelled" && (
@@ -187,9 +334,17 @@ const Bookings = () => {
                   {booking.bookingStatus !== "cancelled" && (
                     <button
                       onClick={() => handleCancel(booking._id)}
-                      className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg"
+                      className="
+                        cursor-pointer
+                        rounded-2xl
+                        bg-red-600
+                        px-5 py-3
+                        text-sm font-semibold text-white
+                        transition-all duration-300
+                        hover:bg-red-700
+                      "
                     >
-                      Cancel
+                      Cancel Booking
                     </button>
                   )}
                 </div>
@@ -198,7 +353,7 @@ const Bookings = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

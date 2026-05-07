@@ -1,67 +1,238 @@
 import React from "react";
+
+import { Link } from "react-router-dom";
+
 import { useSelector } from "react-redux";
+
 import { Card, CardContent } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
-import { User, Mail, Phone, MapPin, ShoppingBag, Heart } from "lucide-react";
+
+import {
+  Mail,
+  Phone,
+  MapPin,
+  ShoppingBag,
+  Heart,
+  ChevronRight,
+} from "lucide-react";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <div className="min-h-screen bg-green-50 dark:bg-[#121212] py-10 px-4">
-      <div className="max-w-5xl mx-auto">
-        
-        {/* Top Section */}
-        <Card className="rounded-3xl shadow-xl border-none bg-white dark:bg-green-950">
-          <CardContent className="p-8 flex flex-col md:flex-row items-center gap-8">
-            <div className="h-28 w-28 rounded-full bg-green-600 text-white flex items-center justify-center text-4xl font-bold">
+    <section
+      className="
+        min-h-screen
+        bg-[#FBFAF5]
+        px-4 py-10
+        transition-colors duration-300
+        dark:bg-[#2C2C2C]
+        font-['Manrope']
+      "
+    >
+      <div className="mx-auto max-w-5xl">
+        {/* Header */}
+        <div className="mb-10">
+          <p
+            className="
+              mb-3 text-sm
+              font-semibold uppercase tracking-[0.2em]
+              text-[#007200]
+            "
+          >
+            Account
+          </p>
+
+          <h1
+            className="
+              text-4xl md:text-5xl
+              font-bold
+              text-[#007200]
+              dark:text-green-300
+              font-['Arvo']
+            "
+          >
+            My Profile
+          </h1>
+
+          <p
+            className="
+              mt-4 text-base
+              text-gray-600
+              dark:text-gray-300
+            "
+          >
+            Manage your personal information and account activity.
+          </p>
+        </div>
+
+        {/* Profile Card */}
+        <Card
+          className="
+            rounded-[2rem]
+            border border-gray-200
+            bg-white
+            shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+            dark:border-[#4A4A4A]
+            dark:bg-[#3A3A3A]
+          "
+        >
+          <CardContent
+            className="
+              flex flex-col gap-8
+              p-6 md:flex-row md:items-center md:p-10
+            "
+          >
+            {/* Avatar */}
+            <div
+              className="
+                flex h-28 w-28 items-center justify-center
+                rounded-full
+                bg-[#007200]
+                text-3xl font-bold text-white
+                font-['Arvo']
+              "
+            >
               {user?.name?.slice(0, 2).toUpperCase()}
             </div>
 
-            <div className="space-y-2 text-center md:text-left">
-              <h1 className="text-3xl font-bold text-green-900 dark:text-white">
+            {/* Details */}
+            <div className="flex-1">
+              <h2
+                className="
+                  text-3xl font-bold
+                  text-[#1F2937]
+                  dark:text-white
+                  font-['Arvo']
+                "
+              >
                 {user?.name}
-              </h1>
-              <p className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                <Mail size={18} /> {user?.email}
-              </p>
-              <p className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                <Phone size={18} /> +91 XXXXXXXXXX
-              </p>
-              <p className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                <MapPin size={18} /> India
-              </p>
-              <Button className="mt-3 bg-green-600 hover:bg-green-700">
+              </h2>
+
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                  <Mail size={18} />
+                  <span>{user?.email}</span>
+                </div>
+
+                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                  <Phone size={18} />
+                  <span>+91 XXXXXXXXXX</span>
+                </div>
+
+                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                  <MapPin size={18} />
+                  <span>India</span>
+                </div>
+              </div>
+
+              {/* Button */}
+              {/* <Button
+                className="
+                  mt-8
+                  cursor-pointer
+                  rounded-2xl
+                  bg-[#007200]
+                  px-6 py-3
+                  text-white
+                  transition-all duration-300
+                  hover:bg-[#04471c]
+                "
+              >
                 Edit Profile
-              </Button>
+              </Button> */}
             </div>
           </CardContent>
         </Card>
 
-        {/* Bottom Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mt-8">
-          <Card className="rounded-2xl hover:shadow-lg transition">
-            <CardContent className="p-6 flex items-center gap-4">
-              <ShoppingBag className="text-green-600" size={30} />
-              <div>
-                <h2 className="text-xl font-semibold">My Orders</h2>
-                <p className="text-gray-500">Check your order history</p>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Links */}
+        <div
+          className="
+            mt-10
+            rounded-[2rem]
+            border border-gray-200
+            bg-white
+            p-4
+            shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+            dark:border-[#4A4A4A]
+            dark:bg-[#3A3A3A]
+          "
+        >
+          <Link
+            to="/orders"
+            className="
+              flex cursor-pointer items-center justify-between
+              rounded-2xl
+              px-4 py-4
+              transition-all duration-300
+              hover:bg-[#F4F1E8]
+              dark:hover:bg-[#2C2C2C]
+            "
+          >
+            <div className="flex items-center gap-4">
+              <ShoppingBag className="text-[#007200]" size={22} />
 
-          <Card className="rounded-2xl hover:shadow-lg transition">
-            <CardContent className="p-6 flex items-center gap-4">
-              <Heart className="text-red-500" size={30} />
               <div>
-                <h2 className="text-xl font-semibold">Wishlist</h2>
-                <p className="text-gray-500">Saved favourite items</p>
+                <h3
+                  className="
+                    text-lg font-bold
+                    text-[#1F2937]
+                    dark:text-white
+                    font-['Arvo']
+                  "
+                >
+                  My Orders
+                </h3>
+
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  View your order history
+                </p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+
+            <ChevronRight className="text-gray-400" />
+          </Link>
+
+          <div className="my-2 h-px bg-gray-200 dark:bg-[#4A4A4A]" />
+
+          <Link
+            to="/favourites"
+            className="
+              flex cursor-pointer items-center justify-between
+              rounded-2xl
+              px-4 py-4
+              transition-all duration-300
+              hover:bg-[#F4F1E8]
+              dark:hover:bg-[#2C2C2C]
+            "
+          >
+            <div className="flex items-center gap-4">
+              <Heart className="text-red-500" size={22} />
+
+              <div>
+                <h3
+                  className="
+                    text-lg font-bold
+                    text-[#1F2937]
+                    dark:text-white
+                    font-['Arvo']
+                  "
+                >
+                  Wishlist
+                </h3>
+
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Your saved favourite products
+                </p>
+              </div>
+            </div>
+
+            <ChevronRight className="text-gray-400" />
+          </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

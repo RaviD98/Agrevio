@@ -15,23 +15,22 @@ import {
   Archive,
   Users,
   Store,
+  ChevronRight,
 } from "lucide-react";
 
-import { Separator } from "@/components/ui/separator";
-
 const iconMap = {
-  home: <Home className="w-4 h-4 mr-1" />,
-  products: <Store className="w-4 h-4 mr-1" />,
-  about: <Info className="w-4 h-4 mr-1" />,
-  contact: <Phone className="w-4 h-4 mr-1" />,
-  cart: <ShoppingCart className="w-4 h-4 mr-1" />,
-  seeds: <Leaf className="w-4 h-4 mr-1" />,
-  irrigation: <Droplet className="w-4 h-4 mr-1" />,
-  machinery: <Hammer className="w-4 h-4 mr-1" />,
-  tools: <Wrench className="w-4 h-4 mr-1" />,
-  pesticides: <Bug className="w-4 h-4 mr-1" />,
-  storage: <Archive className="w-4 h-4 mr-1" />,
-  team: <Users className="w-4 h-4 mr-1" />,
+  home: <Home className="w-4 h-4" />,
+  products: <Store className="w-4 h-4" />,
+  about: <Info className="w-4 h-4" />,
+  contact: <Phone className="w-4 h-4" />,
+  cart: <ShoppingCart className="w-4 h-4" />,
+  seeds: <Leaf className="w-4 h-4" />,
+  irrigation: <Droplet className="w-4 h-4" />,
+  machinery: <Hammer className="w-4 h-4" />,
+  tools: <Wrench className="w-4 h-4" />,
+  pesticides: <Bug className="w-4 h-4" />,
+  storage: <Archive className="w-4 h-4" />,
+  team: <Users className="w-4 h-4" />,
 };
 
 const Breadcrumb = () => {
@@ -46,49 +45,101 @@ const Breadcrumb = () => {
   const isMongoId = (value) => /^[0-9a-fA-F]{24}$/.test(value);
 
   return (
-    <nav className="bg-[#edf7f6] dark:bg-[#121212] px-6 py-4 sticky top-0 z-40 rounded-lg shadow-sm flex flex-wrap items-center gap-2 text-sm font-medium">
-      {/* Home */}
-      <Link
-        to="/"
-        className="flex items-center text-green-700 dark:text-green-300 hover:text-green-900 dark:hover:text-white transition"
+    <nav
+      className="
+        sticky top-0 z-40
+        border-b border-gray-200
+        bg-[#FBFAF5]/90
+        backdrop-blur-md
+        dark:border-[#3A3A3A]
+        dark:bg-[#2C2C2C]/90
+      "
+    >
+      <div
+        className="
+          mx-auto flex max-w-7xl
+          items-center gap-2
+          overflow-x-auto
+          whitespace-nowrap
+          px-4 py-4
+          text-sm
+          scrollbar-hide
+          font-['Inter']
+        "
       >
-        <Home className="w-4 h-4 mr-1" />
-        Home
-      </Link>
+        {/* Home */}
+        <Link
+          to="/"
+          className="
+            flex items-center gap-2
+            rounded-full px-3 py-1.5
+            font-medium
+            text-[#007200]
+            transition-all duration-200
+            hover:bg-[#007200]/10
+            hover:text-[#04471c]
+            dark:text-green-300
+          "
+        >
+          <Home className="w-4 h-4" />
+          Home
+        </Link>
 
-      {/* Dynamic Breadcrumbs */}
-      {pathnames.map((name, idx) => {
-        const routeTo = `/${rawPathnames.slice(0, idx + 1).join("/")}`;
+        {/* Dynamic Breadcrumbs */}
+        {pathnames.map((name, idx) => {
+          const routeTo = `/${rawPathnames.slice(0, idx + 1).join("/")}`;
 
-        const isLast = idx === pathnames.length - 1;
+          const isLast = idx === pathnames.length - 1;
 
-        const icon = iconMap[name.toLowerCase()] || (
-          <PackageOpen className="w-4 h-4 mr-1" />
-        );
+          const icon = iconMap[name.toLowerCase()] || (
+            <PackageOpen className="w-4 h-4" />
+          );
 
-        const label = isMongoId(name)
-          ? "Product Details"
-          : name.replace(/-/g, " ").replace(/^\w/, (c) => c.toUpperCase());
+          const label = isMongoId(name)
+            ? "Product Details"
+            : name.replace(/-/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 
-        return (
-          <React.Fragment key={routeTo}>
-            <Separator orientation="vertical" className="h-4 bg-green-400" />
+          return (
+            <React.Fragment key={routeTo}>
+              <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
 
-            {isLast ? (
-              <span className="flex items-center text-gray-600 dark:text-gray-400 cursor-default">
-                {icon} {label}
-              </span>
-            ) : (
-              <Link
-                to={routeTo}
-                className="flex items-center text-green-700 dark:text-green-300 hover:text-green-900 dark:hover:text-white transition"
-              >
-                {icon} {label}
-              </Link>
-            )}
-          </React.Fragment>
-        );
-      })}
+              {isLast ? (
+                <span
+                  className="
+                    flex items-center gap-2
+                    rounded-full
+                    bg-[#007200]/10
+                    px-3 py-1.5
+                    font-medium
+                    text-[#04471c]
+                    dark:text-green-300
+                  "
+                >
+                  {icon}
+                  {label}
+                </span>
+              ) : (
+                <Link
+                  to={routeTo}
+                  className="
+                    flex items-center gap-2
+                    rounded-full px-3 py-1.5
+                    font-medium
+                    text-[#007200]
+                    transition-all duration-200
+                    hover:bg-[#007200]/10
+                    hover:text-[#04471c]
+                    dark:text-green-300
+                  "
+                >
+                  {icon}
+                  {label}
+                </Link>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
     </nav>
   );
 };
