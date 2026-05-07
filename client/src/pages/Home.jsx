@@ -92,71 +92,341 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-24 md:grid-cols-2 md:items-center">
-        {/* Image */}
-        <div className="relative">
-          <img
-            src={tomatoSeeds}
-            alt="Modern Agriculture"
-            className="w-full rounded-3xl object-cover shadow-2xl"
-          />
+      {/* Stats Strip */}
+      <section className="border-y border-neutral-200 bg-white dark:border-neutral-800 dark:bg-[#222225]">
+        <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              value: "500+",
+              label: "Agricultural Products",
+            },
+            {
+              value: "24/7",
+              label: "Marketplace Access",
+            },
+            {
+              value: "Smart",
+              label: "Digital Agriculture",
+            },
+            {
+              value: "Fast",
+              label: "Equipment Discovery",
+            },
+          ].map((item) => (
+            <div key={item.label}>
+              <h3 className="text-4xl font-bold text-[#007200] font-['Arvo']">
+                {item.value}
+              </h3>
 
-          <div className="absolute -bottom-6 left-6 rounded-2xl border border-neutral-200 bg-white/90 px-5 py-4 shadow-xl backdrop-blur-md dark:border-neutral-800 dark:bg-[#222225]/90">
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Trusted by modern agri-businesses
+              <p className="mt-2 text-neutral-500 dark:text-neutral-400">
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="bg-[#FBFAF5] py-24 dark:bg-[#2C2C2C]">
+        <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-2 lg:items-center">
+          {/* Image */}
+          <div className="relative">
+            <img
+              src={tomatoSeeds}
+              alt="Modern Agriculture"
+              className="
+          w-full rounded-[2rem]
+          object-cover shadow-[0_10px_40px_rgba(0,0,0,0.08)]
+        "
+            />
+
+            <div
+              className="
+          absolute -bottom-5 left-5
+          rounded-2xl border border-neutral-200
+          bg-white px-5 py-4 shadow-lg
+          dark:border-neutral-700
+          dark:bg-[#3A3A3A]
+        "
+            >
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                Trusted by modern agri-businesses
+              </p>
+
+              <h3 className="mt-1 text-lg font-bold font-['Arvo']">
+                Smart Farming Solutions
+              </h3>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div>
+            <p
+              className="
+          mb-3 text-sm font-semibold uppercase
+          tracking-[0.2em] text-[#007200]
+        "
+            >
+              About Agrevio
             </p>
 
-            <h3 className="mt-1 text-xl font-semibold">
-              Smart Farming Solutions
-            </h3>
+            <h2
+              className="
+          text-4xl font-bold leading-tight
+          text-neutral-900
+          dark:text-white
+          md:text-5xl
+          font-['Arvo']
+        "
+            >
+              Bridging Agriculture with Technology
+            </h2>
+
+            <p
+              className="
+          mt-6 text-lg leading-relaxed
+          text-neutral-600
+          dark:text-neutral-300
+        "
+            >
+              Agrevio helps farmers and agri-businesses access quality products,
+              services, and equipment through a seamless digital experience.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-4">
+              {[
+                {
+                  title: "24/7",
+                  desc: "Platform Access",
+                },
+                {
+                  title: "Smart",
+                  desc: "Agriculture Network",
+                },
+                {
+                  title: "Fast",
+                  desc: "Product Discovery",
+                },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="
+              rounded-2xl border border-neutral-200
+              bg-white px-5 py-4 shadow-sm
+              dark:border-neutral-700
+              dark:bg-[#3A3A3A]
+            "
+                >
+                  <h4
+                    className="
+                text-2xl font-bold
+                text-[#007200]
+                font-['Arvo']
+              "
+                  >
+                    {item.title}
+                  </h4>
+
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Content */}
-        <div>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-green-600 dark:text-green-400">
-            About Agrevio
-          </p>
-
-          <h2 className="text-4xl font-bold leading-tight md:text-5xl">
-            Bridging Agriculture with Technology
-          </h2>
-
-          <p className="mt-6 text-lg leading-relaxed text-neutral-600 dark:text-neutral-300">
-            Agrevio helps farmers and agri-businesses access quality products,
-            services, and equipment through a seamless digital experience. From
-            seeds and machinery to logistics and support, everything is designed
-            with simplicity and efficiency in mind.
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-4">
-            <div className="rounded-2xl border border-neutral-200 bg-white px-5 py-4 shadow-sm dark:border-neutral-800 dark:bg-[#222225]">
-              <h4 className="text-2xl font-bold text-green-600">24/7</h4>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Platform Access
+      {/* Categories Preview */}
+      <section className="bg-[#FBFAF5] py-24 dark:bg-[#2C2C2C]">
+        <div className="mx-auto max-w-7xl px-6">
+          <div
+            className="
+        flex flex-col gap-6
+        md:flex-row md:items-end md:justify-between
+      "
+          >
+            <div>
+              <p
+                className="
+            mb-3 text-sm font-semibold uppercase
+            tracking-[0.2em] text-[#007200]
+          "
+              >
+                Marketplace Categories
               </p>
+
+              <h2
+                className="
+            text-4xl font-bold
+            text-neutral-900
+            dark:text-white
+            font-['Arvo']
+          "
+              >
+                Everything agriculture needs
+              </h2>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 bg-white px-5 py-4 shadow-sm dark:border-neutral-800 dark:bg-[#222225]">
-              <h4 className="text-2xl font-bold text-green-600">Smart</h4>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Agriculture Network
-              </p>
-            </div>
+            <Button
+              onClick={() => navigate("/products")}
+              className="
+          rounded-xl bg-[#007200]
+          hover:bg-[#04471c]
+          cursor-pointer
+        "
+            >
+              Explore Marketplace
+            </Button>
+          </div>
 
-            <div className="rounded-2xl border border-neutral-200 bg-white px-5 py-4 shadow-sm dark:border-neutral-800 dark:bg-[#222225]">
-              <h4 className="text-2xl font-bold text-green-600">Fast</h4>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Product Discovery
-              </p>
-            </div>
+          <div
+            className="
+        mt-12 grid gap-6
+        sm:grid-cols-2
+        lg:grid-cols-4
+      "
+          >
+            {["Seeds", "Machinery", "Irrigation", "Fertilizers"].map((item) => (
+              <div
+                key={item}
+                className="
+            rounded-[2rem]
+            border border-neutral-200
+            bg-white p-6
+            shadow-sm
+            transition-all duration-300
+            hover:-translate-y-1 hover:shadow-lg
+            dark:border-neutral-700
+            dark:bg-[#3A3A3A]
+            cursor-pointer
+          "
+              >
+                <h3
+                  className="
+              text-2xl font-bold
+              text-neutral-900
+              dark:text-white
+              font-['Arvo']
+            "
+                >
+                  {item}
+                </h3>
+
+                <p
+                  className="
+              mt-4 leading-relaxed
+              text-neutral-500
+              dark:text-neutral-400
+            "
+                >
+                  Discover trusted agricultural products and modern farming
+                  solutions.
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Features */}
       <FeaturesSection />
+
+      {/* How It Works */}
+      <section className="py-24 dark:bg-[#2C2C2C] bg-[#FBFAF5]">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="text-center">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#007200]">
+              Simple Process
+            </p>
+
+            <h2 className="text-4xl font-bold font-['Arvo']">
+              How Agrevio Works
+            </h2>
+          </div>
+
+          <div className="mt-16 grid gap-8 md:grid-cols-3">
+            {[
+              {
+                step: "01",
+                title: "Explore Products",
+                text: "Browse agricultural products and services from verified vendors.",
+              },
+              {
+                step: "02",
+                title: "Connect & Purchase",
+                text: "Rent machinery or purchase products seamlessly online.",
+              },
+              {
+                step: "03",
+                title: "Grow Efficiently",
+                text: "Use modern agricultural solutions to improve productivity.",
+              },
+            ].map((item) => (
+              <div
+                key={item.step}
+                className="
+            rounded-3xl border border-neutral-200
+            bg-[#f7f7f4] p-8
+            dark:border-neutral-800 dark:bg-[#18181b]
+          "
+              >
+                <span className="text-5xl font-bold text-[#007200] font-['Arvo']">
+                  {item.step}
+                </span>
+
+                <h3 className="mt-6 text-2xl font-bold font-['Arvo']">
+                  {item.title}
+                </h3>
+
+                <p className="mt-4 leading-relaxed text-neutral-500 dark:text-neutral-400">
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="px-6 py-24 dark:bg-[#2C2C2C] bg-[#FBFAF5]">
+        <div
+          className="
+      mx-auto max-w-7xl overflow-hidden
+      rounded-[2.5rem]
+      bg-[#007200]
+      px-8 py-16 text-white
+      md:px-16
+      
+    "
+        >
+          <div className="max-w-3xl">
+            <p className="mb-3 text-sm uppercase tracking-[0.2em] text-green-200">
+              Join Agrevio
+            </p>
+
+            <h2 className="text-4xl font-bold leading-tight font-['Arvo'] md:text-5xl">
+              Modernize your agricultural journey today.
+            </h2>
+
+            <p className="mt-6 text-lg leading-relaxed text-green-100">
+              Discover products, connect with vendors, and experience a smarter
+              agriculture marketplace designed for the future.
+            </p>
+
+            <Button
+              onClick={() => navigate("/products")}
+              className="
+          mt-10 rounded-xl
+          bg-white text-[#007200]
+          hover:bg-neutral-100
+        "
+            >
+              Start Exploring
+            </Button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
