@@ -1,10 +1,11 @@
+import { BASE_URL } from "@/constants/api";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const deliveryApi = createApi({
   reducerPath: "deliveryApi",
 
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api/v1/deliveries",
+    baseUrl: `${BASE_URL}/deliveries`,
 
     credentials: "include",
   }),

@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BASE_URL } from "@/constants/api";
 
 export const cartApi = createApi({
   reducerPath: "cartApi",
 
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api/v1/cart",
+    baseUrl: `${BASE_URL}/cart`,
     credentials: "include",
   }),
 

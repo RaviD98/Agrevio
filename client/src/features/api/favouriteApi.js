@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-const FAVOURITE_API = "http://localhost:8080/api/v1/favourites/";
+import { BASE_URL } from "@/constants/api";
 
 export const favouriteApi = createApi({
   reducerPath: "favouriteApi",
@@ -8,7 +7,7 @@ export const favouriteApi = createApi({
   tagTypes: ["Favourite"],
 
   baseQuery: fetchBaseQuery({
-    baseUrl: FAVOURITE_API,
+    baseUrl: `${BASE_URL}/favourites`,
 
     credentials: "include",
   }),

@@ -1,12 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userLoggedIn, userLoggedOut } from "../authSlice";
-
-const USER_API = "http://localhost:8080/api/v1/auth/";
+import { BASE_URL } from "@/constants/api";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: USER_API,
+    baseUrl: `${BASE_URL}/auth`,
     credentials: "include",
   }),
   endpoints: (builder) => ({
@@ -34,7 +33,7 @@ export const authApi = createApi({
     }),
     getMe: builder.query({
       query: () => ({
-        url: "http://localhost:8080/api/v1/users/me",
+        url: `${BASE_URL}/users/me`,
 
         method: "GET",
       }),

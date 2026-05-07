@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 
 import { useGetCartQuery } from "@/features/api/cartApi";
 
+import { BASE_URL } from "@/constants/api";
+
 const CheckoutButton = ({
   singleItem = null,
 
@@ -60,7 +62,7 @@ const CheckoutButton = ({
 
     try {
       const res = await fetch(
-        "http://localhost:8080/api/v1/payments/checkout-session",
+        `${BASE_URL}/payments/checkout-session`,
         {
           method: "POST",
 
