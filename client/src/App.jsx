@@ -27,6 +27,7 @@ import EditProduct from "./pages/EditProduct";
 import VendorRoute from "./components/VendorRoute";
 import Orders from "./pages/Orders";
 import Bookings from "./pages/Bookings";
+import Deliveries from "./pages/Deliveries";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -151,6 +152,14 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <PaymentCancelled />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/deliveries"
+        element={
+          <ProtectedRoute>
+            <Deliveries />
           </ProtectedRoute>
         }
       />

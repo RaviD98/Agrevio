@@ -15,6 +15,7 @@ import productRoutes from "./routes/product.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import orderRoutes from "./routes/order.route.js";
 import bookingRoutes from "./routes/booking.routes.js";
+import deliveryRoutes from "./routes/delivery.routes.js";
 // Security middlewares
 app.use(helmet());
 
@@ -44,6 +45,7 @@ app.use("/api/v1/favourites", favouriteRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/bookings", bookingRoutes);
+app.use("/api/v1/deliveries", deliveryRoutes);
 
 // Health check
 app.get("/", (req, res) => {
