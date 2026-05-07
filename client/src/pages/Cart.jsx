@@ -102,7 +102,12 @@ const Cart = () => {
             Total: ₹{totalPrice}
           </p>
 
-          <CheckoutButton />
+          <CheckoutButton
+            metadata={{
+              type: "order",
+              resourceId: "pending",
+            }}
+          />
 
           <Button
             className="bg-[#68d388] hover:bg-green-600 text-white mt-4 sm:mt-0"

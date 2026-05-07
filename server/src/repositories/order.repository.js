@@ -9,3 +9,9 @@ export const findOrdersByUserId = (userId) => {
     .populate("items.product")
     .sort({ createdAt: -1 });
 };
+
+export const updateOrderPaymentStatus = (orderId, updateData) => {
+  return Order.findByIdAndUpdate(orderId, updateData, {
+    new: true,
+  });
+};

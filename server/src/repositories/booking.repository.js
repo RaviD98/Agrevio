@@ -50,3 +50,9 @@ export const updateBookingStatus = (bookingId, bookingStatus) => {
     },
   );
 };
+
+export const updateBookingPaymentStatus = (bookingId, updateData) => {
+  return Booking.findByIdAndUpdate(bookingId, updateData, {
+    new: true,
+  });
+};
