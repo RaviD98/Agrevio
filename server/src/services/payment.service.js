@@ -1,4 +1,10 @@
+import dotenv from "dotenv";
 import Stripe from "stripe";
+
+dotenv.config({
+  path:
+    process.env.NODE_ENV === "production" ? ".env.production" : ".env.local",
+});
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 

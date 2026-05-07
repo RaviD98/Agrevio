@@ -1,6 +1,8 @@
 # Node.js
 node_modules/
 .env
+.env.local
+.env.production
 server/.env
 dist/
 build/

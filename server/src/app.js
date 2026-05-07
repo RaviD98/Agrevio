@@ -25,7 +25,7 @@ app.use(morgan("dev"));
 // CORS
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: [process.env.CLIENT_URL, process.env.PRODUCTION_CLIENT_URL],
     credentials: true,
   }),
 );
