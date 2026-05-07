@@ -62,7 +62,7 @@ const AddProduct = () => {
 
       toast.success("Product created successfully");
 
-      navigate("/products");
+      navigate("/vendor/dashboard");
     } catch (error) {
       toast.error(error?.data?.message || "Failed to create product");
     }

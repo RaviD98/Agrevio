@@ -83,7 +83,7 @@ const HomePage = () => {
 
             <Button
               variant="outline"
-              onClick={() => navigate("/products/seeds")}
+              onClick={() => navigate("/products/category/seeds")}
               className="h-12 rounded-xl border-white/30 bg-white/10 px-6 text-base text-white backdrop-blur-md hover:bg-white/20"
             >
               Explore Seeds

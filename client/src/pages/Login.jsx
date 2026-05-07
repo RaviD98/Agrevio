@@ -22,7 +22,6 @@ import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from "@/features/api/authApi";
-import { userLoggedIn } from "@/features/authSlice";
 
 
 
@@ -65,7 +64,19 @@ const Login = () => {
       : setLoginInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSignup = () => registerUser(signupInput);
+const handleSignup = async () => {
+  try {
+    await registerUser(signupInput).unwrap();
+
+    await loginUser({
+      email: signupInput.email,
+
+      password: signupInput.password,
+    }).unwrap();
+  } catch (error) {
+    console.log(error);
+  }
+};
   const handleLogin = () => loginUser(loginInput);
 
   useEffect(() => {
@@ -83,10 +94,9 @@ const Login = () => {
       toast.error(registerError?.data?.message || "Signup failed.");
     }
 
-    if (loginIsSuccess && loginData?.data?.user) {
-      dispatch(userLoggedIn(loginData.data.user));
-      toast.success(loginData.message || "Login successful.");
-      // localStorage.setItem("user", JSON.stringify(loginData.user));
+    if (loginIsSuccess) {
+      toast.success(loginData?.message || "Login successful.");
+
       navigate("/");
     }
     if (loginError) {
