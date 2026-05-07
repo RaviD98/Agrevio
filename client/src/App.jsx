@@ -178,6 +178,7 @@ const router = createBrowserRouter(
   ),
 );
 
-const App = () => <RouterProvider router={router} />;
-
+const App = () => (
+  <RouterProvider router={router} future={{ v7_startTransition: true }} />
+);
 export default App;

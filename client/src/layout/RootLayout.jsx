@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-
-import { AnimatePresence, motion } from "framer-motion";
-
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ScrollToTop from "@/components/ScrollToTop";
 import NavBar from "@/components/Navbar";
@@ -49,30 +46,9 @@ const RootLayout = () => {
         )}
 
         {/* Main Content */}
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.main
-            key={location.pathname}
-            initial={{
-              opacity: 0,
-              y: 20,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            exit={{
-              opacity: 0,
-              y: -20,
-            }}
-            transition={{
-              duration: 0.25,
-              ease: "easeInOut",
-            }}
-            className="flex-1"
-          >
-            <Outlet />
-          </motion.main>
-        </AnimatePresence>
+        <main className="flex-1">
+          <Outlet />
+        </main>
 
         {/* Footer */}
         {!shouldHideFooter && <Footer />}
