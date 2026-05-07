@@ -1,6 +1,7 @@
 import {
   createOrder,
   findOrdersByUserId,
+  updateOrderPaymentStatus,
 } from "../repositories/order.repository.js";
 
 import {
@@ -54,4 +55,8 @@ export const getUserOrdersService = async (userId) => {
   const orders = await findOrdersByUserId(userId);
 
   return orders;
+};
+
+export const updateOrderPaymentStatusService = async (orderId, updateData) => {
+  return await updateOrderPaymentStatus(orderId, updateData);
 };

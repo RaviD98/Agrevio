@@ -6,14 +6,17 @@ import { useGetCartQuery } from "@/features/api/cartApi";
 
 const CheckoutButton = ({
   singleItem = null,
+
   label = "Checkout All Items",
+
+  metadata = {},
 }) => {
   const { data } = useGetCartQuery();
 
   const cartItems = data?.data?.items || [];
 
   const getLineItems = () => {
-    // Single product checkout
+    // Single item
     if (singleItem) {
       return [
         {
@@ -32,7 +35,7 @@ const CheckoutButton = ({
       ];
     }
 
-    // Cart checkout
+    // Cart
     return cartItems.map((item) => ({
       price_data: {
         currency: "inr",
@@ -48,51 +51,48 @@ const CheckoutButton = ({
     }));
   };
 
-const handleCheckout = async () => {
-  const lineItems = getLineItems();
+  const handleCheckout = async () => {
+    const lineItems = getLineItems();
 
-  if (lineItems.length === 0) {
-    return alert("No items to checkout");
-  }
-
-  try {
-    // Mark for order creation
-    if (!singleItem) {
-      localStorage.setItem("shouldCreateOrder", "true");
+    if (lineItems.length === 0) {
+      return alert("No items to checkout");
     }
 
-    const res = await fetch(
-      "http://localhost:8080/api/v1/payments/checkout-session",
-      {
-        method: "POST",
+    try {
+      const res = await fetch(
+        "http://localhost:8080/api/v1/payments/checkout-session",
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          credentials: "include",
+
+          body: JSON.stringify({
+            line_items: lineItems,
+
+            metadata,
+          }),
         },
+      );
 
-        credentials: "include",
+      if (!res.ok) {
+        const text = await res.text();
 
-        body: JSON.stringify({
-          line_items: lineItems,
-        }),
-      },
-    );
+        throw new Error(`Server ${res.status}: ${text}`);
+      }
 
-    if (!res.ok) {
-      const text = await res.text();
+      const result = await res.json();
 
-      throw new Error(`Server ${res.status}: ${text}`);
+      window.location.href = result.data.url;
+    } catch (err) {
+      console.error("Stripe checkout error:", err);
+
+      alert("Unable to start checkout");
     }
-
-    const { url } = await res.json();
-
-    window.location.href = url;
-  } catch (err) {
-    console.error("Stripe checkout error:", err);
-
-    alert("Unable to start checkout");
-  }
-};
+  };
 
   const isDisabled = !singleItem && cartItems.length === 0;
 

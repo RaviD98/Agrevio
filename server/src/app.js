@@ -21,9 +21,6 @@ app.use(helmet());
 // Logging
 app.use(morgan("dev"));
 
-// Body parser
-app.use(express.json());
-
 // CORS
 app.use(
   cors({
@@ -32,10 +29,16 @@ app.use(
   }),
 );
 
+// Stripe webhook route
+app.use("/api/v1/payments", paymentRoutes);
+
+// Body parser
+app.use(express.json());
+
+
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/favourites", favouriteRoutes);
 app.use("/api/v1/products", productRoutes);

@@ -7,6 +7,8 @@ import {
   useCancelBookingMutation,
 } from "@/features/api/bookingApi";
 
+import CheckoutButton from "@/components/CheckoutButton";
+
 const Bookings = () => {
   const { data, isLoading, isError } = useGetBookingsQuery();
 
@@ -161,15 +163,35 @@ const Bookings = () => {
                   </h3>
                 </div>
 
-                {/* Cancel */}
-                {booking.bookingStatus !== "cancelled" && (
-                  <button
-                    onClick={() => handleCancel(booking._id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg"
-                  >
-                    Cancel
-                  </button>
-                )}
+                <div className="flex gap-3 flex-wrap">
+                  {/* Pay */}
+                  {booking.paymentStatus === "pending" &&
+                    booking.bookingStatus !== "cancelled" && (
+                      <CheckoutButton
+                        label="Pay Now"
+                        metadata={{
+                          type: "booking",
+
+                          resourceId: booking._id,
+                        }}
+                        singleItem={{
+                          title: booking.product?.title,
+
+                          price: booking.totalAmount,
+                        }}
+                      />
+                    )}
+
+                  {/* Cancel */}
+                  {booking.bookingStatus !== "cancelled" && (
+                    <button
+                      onClick={() => handleCancel(booking._id)}
+                      className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}

@@ -8,6 +8,7 @@ import {
   findBookingsByUser,
   findBookingById,
   updateBookingStatus,
+  updateBookingPaymentStatus,
 } from "../repositories/booking.repository.js";
 
 // Create booking
@@ -100,4 +101,11 @@ export const cancelBookingService = async (bookingId, userId) => {
   }
 
   return await updateBookingStatus(bookingId, "cancelled");
+};
+
+export const updateBookingPaymentStatusService = async (
+  bookingId,
+  updateData,
+) => {
+  return await updateBookingPaymentStatus(bookingId, updateData);
 };
