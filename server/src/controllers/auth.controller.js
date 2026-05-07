@@ -1,8 +1,20 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-import { registerUser, loginUser, refreshAccessToken } from "../services/auth.service.js";
+import {
+  registerUser,
+  loginUser,
+  refreshAccessToken,
+} from "../services/auth.service.js";
+
 import { findUserById } from "../repositories/user.repository.js";
+
+// Common cookie options
+const cookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+};
 
 // Register
 export const register = asyncHandler(async (req, res) => {
@@ -33,20 +45,16 @@ export const login = asyncHandler(async (req, res) => {
 
   // Save refresh token in DB
   user.refreshToken = refreshToken;
-  await user.save({ validateBeforeSave: false });
+
+  await user.save({
+    validateBeforeSave: false,
+  });
 
   const loggedInUser = await findUserById(user._id).select("-refreshToken");
 
-  // Cookies
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  };
-
   res
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
     .status(200)
     .json(
       new ApiResponse(
@@ -66,31 +74,28 @@ export const logout = asyncHandler(async (req, res) => {
   const user = req.user;
 
   user.refreshToken = null;
-  await user.save({ validateBeforeSave: false });
+
+  await user.save({
+    validateBeforeSave: false,
+  });
 
   res
-    .clearCookie("accessToken")
-    .clearCookie("refreshToken")
+    .clearCookie("accessToken", cookieOptions)
+    .clearCookie("refreshToken", cookieOptions)
     .status(200)
     .json(new ApiResponse(200, null, "Logged out successfully"));
 });
 
+// Refresh token
 export const refreshToken = asyncHandler(async (req, res) => {
   const oldToken = req.cookies.refreshToken;
 
   const { newAccessToken, newRefreshToken } =
     await refreshAccessToken(oldToken);
 
-
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  };
-
   res
-    .cookie("accessToken", newAccessToken, options)
-    .cookie("refreshToken", newRefreshToken, options)
+    .cookie("accessToken", newAccessToken, cookieOptions)
+    .cookie("refreshToken", newRefreshToken, cookieOptions)
     .status(200)
     .json(new ApiResponse(200, null, "Token refreshed"));
 });
