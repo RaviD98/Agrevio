@@ -3,7 +3,7 @@ import {
   verifyWebhookSignatureService,
 } from "../services/payment.service.js";
 
-import { updateOrderPaymentStatusService } from "../services/order.service.js";
+import { updateOrderPaymentStatusService, createOrderService } from "../services/order.service.js";
 
 import { updateBookingPaymentStatusService } from "../services/booking.service.js";
 
@@ -52,61 +52,105 @@ export const stripeWebhookController = async (req, res) => {
     return res.status(400).send(`Webhook Error: ${error.message}`);
   }
 
-  // Payment success
-  // Payment success
+  // PAYMENT SUCCESS
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
 
     const metadata = session.metadata;
 
-    // ORDER
-    if (metadata.type === "order") {
-      const updatedOrder = await updateOrderPaymentStatusService(
-        metadata.resourceId,
-        {
-          paymentStatus: "Paid",
+    try {
+      // =========================
+      // ORDER PAYMENT
+      // =========================
+      if (metadata.type === "order") {
+        let order = null;
 
-          status: "Confirmed",
-        },
-      );
+        // If pending order already exists
+        if (
+          metadata.resourceId &&
+          metadata.resourceId !== "pending"
+        ) {
+          order =
+            await updateOrderPaymentStatusService(
+              metadata.resourceId,
+              {
+                paymentStatus: "Paid",
+                status: "Confirmed",
+              },
+            );
+        }
 
-      // Auto-create delivery
-      if (updatedOrder) {
-        await createDeliveryService(updatedOrder.user, {
-          orderId: updatedOrder._id,
+        // If order does NOT exist -> create it
+        else {
+          order = await createOrderService({
+            user: metadata.userId,
 
-          address: metadata.address || "Default Address",
+            items: JSON.parse(metadata.items),
 
-          deliveryCharge: 0,
-        });
+            totalAmount: Number(metadata.totalAmount),
+
+            paymentStatus: "Paid",
+
+            status: "Confirmed",
+          });
+        }
+
+        // Auto delivery creation
+        if (order) {
+          await createDeliveryService(order.user, {
+            orderId: order._id,
+
+            address:
+              metadata.address ||
+              "Default Address",
+
+            deliveryCharge: 0,
+          });
+        }
       }
-    }
 
-    // BOOKING
-    if (metadata.type === "booking") {
-      const updatedBooking = await updateBookingPaymentStatusService(
-        metadata.resourceId,
-        {
-          paymentStatus: "paid",
+      // =========================
+      // BOOKING PAYMENT
+      // =========================
+      if (metadata.type === "booking") {
+        const updatedBooking =
+          await updateBookingPaymentStatusService(
+            metadata.resourceId,
+            {
+              paymentStatus: "paid",
+              bookingStatus: "confirmed",
+            },
+          );
 
-          bookingStatus: "confirmed",
-        },
-      );
+        // Auto-create delivery
+        if (updatedBooking?.deliveryRequired) {
+          await createDeliveryService(
+            updatedBooking.user,
+            {
+              bookingId: updatedBooking._id,
 
-      // Auto-create delivery
-      if (updatedBooking?.deliveryRequired) {
-        await createDeliveryService(updatedBooking.user, {
-          bookingId: updatedBooking._id,
+              address:
+                updatedBooking.deliveryAddress,
 
-          address: updatedBooking.deliveryAddress,
-
-          deliveryCharge: 0,
-        });
+              deliveryCharge: 0,
+            },
+          );
+        }
       }
+
+      return res.status(200).json({
+        received: true,
+      });
+    } catch (error) {
+      console.log("Webhook Error:", error);
+
+      return res.status(500).json({
+        message: "Webhook processing failed",
+      });
     }
   }
 
   res.status(200).json({
     received: true,
   });
-};;
+};
