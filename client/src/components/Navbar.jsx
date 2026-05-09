@@ -261,32 +261,50 @@ const AgriNavbar = () => {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={() => navigate("/profile")}>
-                  <User className="mr-2 h-4 w-4" />
+                <DropdownMenuItem
+                  onClick={() => navigate("/profile")}
+                  className="cursor-pointer"
+                >
+                  <User className="mr-2 h-4 w-4 cursor-pointer" />
                   Profile
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => navigate("/cart")}>
+                <DropdownMenuItem
+                  onClick={() => navigate("/cart")}
+                  className="cursor-pointer"
+                >
                   <ShoppingCart className="mr-2 h-4 w-4" />
                   Cart
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => navigate("/orders")}>
+                <DropdownMenuItem
+                  onClick={() => navigate("/orders")}
+                  className="cursor-pointer"
+                >
                   <Package className="mr-2 h-4 w-4" />
                   Orders
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => navigate("/bookings")}>
+                <DropdownMenuItem
+                  onClick={() => navigate("/bookings")}
+                  className="cursor-pointer"
+                >
                   <Package className="mr-2 h-4 w-4" />
                   Bookings
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => navigate("/deliveries")}>
+                <DropdownMenuItem
+                  onClick={() => navigate("/deliveries")}
+                  className="cursor-pointer"
+                >
                   <Truck className="mr-2 h-4 w-4" />
                   Deliveries
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => navigate("/favourites")}>
+                <DropdownMenuItem
+                  onClick={() => navigate("/favourites")}
+                  className="cursor-pointer"
+                >
                   <Heart className="mr-2 h-4 w-4" />
                   Favourites
                 </DropdownMenuItem>
@@ -299,6 +317,7 @@ const AgriNavbar = () => {
                     <DropdownMenuItem
                       onClick={handleBecomeSeller}
                       disabled={becomingSeller}
+                      className="cursor-pointer"
                     >
                       <Store className="mr-2 h-4 w-4" />
 
@@ -325,7 +344,7 @@ const AgriNavbar = () => {
 
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="text-red-500"
+                  className="text-red-500 cursor-pointer"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout

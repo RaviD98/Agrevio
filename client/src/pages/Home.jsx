@@ -39,7 +39,7 @@ const HomePage = () => {
         <div className="absolute inset-0">
           {images.map((img, index) => (
             <img
-              key={img.alt}
+              key={`${img.alt}-${index}`}
               src={img.src}
               alt={img.alt}
               className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1800ms] ${
@@ -75,7 +75,7 @@ const HomePage = () => {
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Button
               onClick={() => navigate("/products")}
-              className="h-12 rounded-xl bg-green-600 px-6 text-base font-medium text-white hover:bg-green-700"
+              className="h-12 rounded-xl bg-green-600 px-6 text-base font-medium text-white hover:bg-green-700 cursor-pointer"
             >
               Explore Products
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -84,7 +84,7 @@ const HomePage = () => {
             <Button
               variant="outline"
               onClick={() => navigate("/products/category/seeds")}
-              className="h-12 rounded-xl border-white/30 bg-white/10 px-6 text-base text-white backdrop-blur-md hover:bg-white/20"
+              className="h-12 rounded-xl border-white/30 bg-white/10 px-6 text-base text-white backdrop-blur-md hover:bg-white/20 cursor-pointer"
             >
               Explore Seeds
             </Button>

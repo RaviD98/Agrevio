@@ -24,7 +24,9 @@ export const createBookingService = async (userId, bookingData) => {
   }
 
   // Only rentable products
-  if (product.type !== "rent") {
+  const isRentAvailable = product.type === "rent" || product.type === "both";
+
+  if (!isRentAvailable) {
     throw new ApiError(400, "This product is not available for rent");
   }
 
