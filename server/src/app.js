@@ -17,8 +17,11 @@ import orderRoutes from "./routes/order.route.js";
 import bookingRoutes from "./routes/booking.routes.js";
 import deliveryRoutes from "./routes/delivery.routes.js";
 // Security middlewares
-app.use(helmet());
-
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  }),
+);
 // Logging
 app.use(morgan("dev"));
 

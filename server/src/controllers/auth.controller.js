@@ -9,12 +9,20 @@ import {
 
 import { findUserById } from "../repositories/user.repository.js";
 
+
 // Common cookie options
+const isProduction = process.env.NODE_ENV === "production";
+
 const cookieOptions = {
   httpOnly: true,
-  secure: true,
-  sameSite: "none",
+
+  secure: isProduction,
+
+  sameSite: isProduction ? "none" : "lax",
+
+  domain: undefined,
 };
+
 
 // Register
 export const register = asyncHandler(async (req, res) => {

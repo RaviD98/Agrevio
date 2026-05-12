@@ -9,6 +9,8 @@ import userRoutes from "./routes/user.routes.js";
 connectDB();
 import './env.js'
 
+app.set("trust proxy", 1);
+
 const PORT = process.env.PORT || 8000;
 
 app.use("/api/users", userRoutes);

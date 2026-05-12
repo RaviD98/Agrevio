@@ -61,7 +61,7 @@ export const stripeWebhookController = async (req, res) => {
     const session = event.data.object;
 
     const metadata = session.metadata;
-    console.log(metadata);
+    // console.log(metadata);
 
     try {
       // =========================

@@ -13,7 +13,7 @@ import { ApiError } from "../utils/ApiError.js";
 
 // Create order from cart
 export const createOrderService = async (userId) => {
-  console.log("createOrder called");
+  // console.log("createOrder called");
   // Get cart
   const cart = await findCartByUserId(userId);
 

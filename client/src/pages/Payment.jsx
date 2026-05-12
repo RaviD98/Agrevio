@@ -35,7 +35,7 @@ const handleMetadata = {
   totalAmount: product.price,
 };
 
-console.log(handleMetadata);
+// console.log(handleMetadata);
 
   // No product
   if (!product) {
