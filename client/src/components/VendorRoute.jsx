@@ -2,14 +2,14 @@ import React from "react";
 
 import { Navigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+import { useGetMeQuery } from "@/features/api/authApi";
+
 import SectionLoader from "./SectionLoader";
 
 const VendorRoute = ({ children }) => {
-  const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { data, isLoading, isError } = useGetMeQuery();
 
-  // Wait for auth restore
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <SectionLoader />
@@ -17,8 +17,10 @@ const VendorRoute = ({ children }) => {
     );
   }
 
+  const user = data?.data?.user;
+
   // Not logged in
-  if (!isAuthenticated || !user) {
+  if (isError || !user) {
     return <Navigate to="/login" replace />;
   }
 
