@@ -10,6 +10,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 // Create order
 export const createOrderController = asyncHandler(async (req, res) => {
   const order = await createOrderService(req.user._id);
+  console.log("createOrder called");
 
   return res
     .status(201)

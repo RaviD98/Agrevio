@@ -361,6 +361,7 @@ const AgriNavbar = () => {
                 px-6 text-white
                 transition-all duration-300
                 hover:bg-[#04471c]
+                cursor-pointer
               "
             >
               Login

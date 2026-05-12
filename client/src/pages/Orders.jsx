@@ -97,7 +97,7 @@ const Orders = () => {
         <div className="space-y-6">
           {orders.map((order) => (
             <div
-              key={order._id}
+              key={order?._id}
               className="
                 rounded-[2rem]
                 border border-gray-200
@@ -126,7 +126,7 @@ const Orders = () => {
                       font-['Arvo']
                     "
                   >
-                    Order #{order._id.slice(-6)}
+                    Order #{order?._id.slice(-6)}
                   </h2>
 
                   <p
@@ -171,9 +171,9 @@ const Orders = () => {
 
               {/* Items */}
               <div className="mt-8 space-y-5">
-                {order.items.map((item) => (
+                {order.items?.map((item, index) => (
                   <div
-                    key={item.product._id}
+                    key={item?._id || `${order._id}-${index}`}
                     className="
                       flex flex-col gap-5
                       rounded-3xl
@@ -229,7 +229,7 @@ const Orders = () => {
                             dark:text-gray-300
                           "
                         >
-                          Quantity: {item.quantity}
+                          Quantity: {item?.quantity}
                         </p>
                       </div>
                     </div>

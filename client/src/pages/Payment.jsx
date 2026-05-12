@@ -2,6 +2,8 @@ import React from "react";
 
 import { useLocation } from "react-router-dom";
 
+import { useSelector } from "react-redux";
+
 import CheckoutButton from "@/components/CheckoutButton";
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +14,28 @@ const Payment = () => {
   const { state } = useLocation();
 
   const product = state?.product;
+
+const user = useSelector((state) => state.auth.user);
+
+const handleMetadata = {
+  resourceId: "pending",
+
+  type: "order",
+
+  userId: user?.id || user?._id,
+
+  items: JSON.stringify([
+    {
+      product: product._id,
+      quantity: 1,
+      price: product.price,
+    },
+  ]),
+
+  totalAmount: product.price,
+};
+
+console.log(handleMetadata);
 
   // No product
   if (!product) {
@@ -164,6 +188,7 @@ const Payment = () => {
                 <CheckoutButton
                   singleItem={product}
                   label="Proceed to Payment"
+                  metadata={handleMetadata}
                 />
               </div>
 

@@ -250,7 +250,6 @@ const Cart = () => {
               <CheckoutButton
                 metadata={{
                   type: "order",
-                  resourceId: "pending",
                 }}
               />
 

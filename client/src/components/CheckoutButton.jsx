@@ -102,7 +102,7 @@ const CheckoutButton = ({
     <Button
       onClick={handleCheckout}
       disabled={isDisabled}
-      className="bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
+      className="bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 cursor-pointer"
     >
       {label}
     </Button>

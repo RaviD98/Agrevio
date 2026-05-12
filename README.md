@@ -1,21 +1,38 @@
 # Agrevio 🌿
 
-  
-
 Agrevio is a full-stack platform for the agriculture ecosystem that enables users and businesses to **buy, sell, and rent agricultural equipment and products**. It combines e-commerce and rental workflows into a single scalable system.
 
 
-![MVP](https://img.shields.io/badge/MVP-One%20Stop%20Solution-blue)
-
-![Tech Stack](https://img.shields.io/badge/Tech-MERN-blue)
-
+![MVP](https://img.shields.io/badge/MVP-One%20Stop%20Solution-magenta)
+![Tech Stack](https://img.shields.io/badge/Tech-MERN-gold)
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue)
+![Status](https://img.shields.io/badge/Status-Deployed-red)
 
-![Status](https://img.shields.io/badge/Status-Development-blue)
-
+![React](https://img.shields.io/badge/Frontend-React-indigo)
+![Node.js](https://img.shields.io/badge/Backend-Node.js-green)
+![MongoDB](https://img.shields.io/badge/Database-MongoDB-darkgreen)
+![Stripe](https://img.shields.io/badge/Payments-Stripe-purple)
   
 
+## Experience it LIVE : https://agrevio.vercel.app/
+
 ---
+
+
+## Table of Contents
+
+- [Overview](#overview)  
+- [Tech Stack](#tech-stack)  
+- [Architecture](#architecture)  
+- [Key Features](#key-features)  
+- [Project Structure](#project-structure)  
+- [Installation & Setup](#installation--setup)  
+- [Environment Variables](#environment-variables)  
+- [API Endpoints Samples](#api-endpoints-samples)  
+- [Screenshots](#screenshots)  
+- [Future Improvements](#future-improvements)  
+- [Contributors](#contributors)  
+- [License](#license)
 
   
 
@@ -54,10 +71,9 @@ Agrevio provides a unified platform where:
   
 
 - Node.js
-
 - Express.js
-
-- MongoDB (Mongoose)
+- MongoDB (Mongoose ODM)
+- JWT Authentication
 
   
 
@@ -66,10 +82,21 @@ Agrevio provides a unified platform where:
   
 
 - React.js
-
+- Redux Toolkit & RTK Query
+- React Router DOM
 - Tailwind CSS
+- Lucide React Icons
+- Next Themes
 
-  
+### Deployment & Tools
+
+
+
+- Vercel (Frontend Hosting)
+- Render (Backend Hosting)
+- MongoDB Atlas
+- Git & GitHub
+- Postman
 
 ---
 
@@ -77,31 +104,37 @@ Agrevio provides a unified platform where:
 
 ## Architecture
 
-  
+### Backend Architecture
 
-The backend follows a layered architecture pattern:
-
-  
-
-- **Routes**: Define API endpoints
-
-- **Controllers**: Handle request and response
-
-- **Services**: Business logic
-
-- **Repositories**: Database queries
-
-- **Models**: Schema definitions
-
-- **Middlewares**: Authentication and validation
-
-- **Utils**: Shared utilities (ApiError, ApiResponse, asyncHandler)
+The backend follows a layered architecture pattern to maintain scalability, modularity, and clean code organization.
 
   
+
+  
+
+- **Routes** — Define API endpoints and route handlers  
+- **Controllers** — Handle incoming requests and responses  
+- **Services** — Contain business logic and core operations  
+- **Repositories** — Manage database interaction and queries  
+- **Models** — Define MongoDB schemas using Mongoose  
+- **Middlewares** — Handle authentication, authorization, and validations  
+- **Utils** — Shared helper utilities (ApiError, ApiResponse, asyncHandler, etc.)
+
+
+### Frontend Structure
+
+The frontend is organized using a feature-based structure for better maintainability and scalability.
+
+- **Components** — Reusable UI components
+- **Pages** — Application pages and routes
+- **Features** — Redux Toolkit slices and RTK Query APIs
+- **Layouts** — Shared application layouts
+- **Constants** — Static constants and configuration
+- **Utils** — Helper functions and utilities
+- **Assets** — Images, icons, and static resources
+
 
 ---
-
-  
 
 ## Key Features
 
@@ -160,38 +193,31 @@ The backend follows a layered architecture pattern:
 
 ## Project Structure
 
-  
-
 ```
+client/
+  src/
+    app/
+    assets/
+    components/
+    constants/
+    features/
+    layout/
+    pages/
+    utils/
 
 server/
-
-  src/
-
-    config/
-
-    controllers/
-
-    services/
-
-    repositories/
-
-    models/
-
-    routes/
-
-    middleware/
-
-    utils/
+  src/
+    config/
+    controllers/
+    middleware/
+    models/
+    repositories/
+    routes/
+    services/
+    utils/
 
 ```
-
-  
-
 ---
-
-  
-  
 
 ## Installation & Setup
 
@@ -221,17 +247,66 @@ npm run dev
 
 ---
 
-  
+## Environment Variables
 
-## API Testing
-
-  
-
-A Postman collection will be provided for testing authentication APIs. Import it into Postman and update the base URL if required.
-
-  
+Refer to this : [.env.example](./server/.env.example) file for the required environment variables.
 
 ---
+
+
+## API Endpoints Samples
+
+### Authentication
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/v1/auth/register` | Register a new user |
+| POST | `/api/v1/auth/login` | Login user |
+| POST | `/api/v1/auth/logout` | Logout user |
+| POST | `/api/v1/auth/refresh-token` | Refresh Token |
+
+### Users
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/v1/users/me` | Get current user profile |
+| PATCH | `/api/v1/users/become-seller` | Become a seller |
+
+### Cart
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/v1/users/cart` | Add to cart |
+| GET | `/api/v1/users/cart` | Get cart items |
+| DELETE | `/api/v1/users/cart:productID` | Remove item from cart |
+| DELETE | `/api/v1/users/cart` | Clear cart |
+
+
+### Products
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/v1/products` | Get all products |
+| GET | `/api/v1/products/:id` | Get single product |
+| POST | `/api/v1/products` | Create product |
+
+### Orders
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/v1/orders` | Get user orders |
+| POST | `/api/v1/orders` | Create order |
+
+### Payments
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/v1/payments/checkout` | Create Stripe checkout session |
+| POST | `/api/v1/payments/webhook` | Stripe webhook handler |
+---
+
+---
+
+## Screenshots
+
+![Home Page Screenshot](./client/src/assets/home.png)
+![Category Page Screenshot](./client/src/assets/category-page.png)
+![Orders Page Screenshot](./client/src/assets/orders.png)
+![Product Page Screenshot](./client/src/assets/prod-page-fert.png)
 
   
 
@@ -241,13 +316,13 @@ A Postman collection will be provided for testing authentication APIs. Import it
 
 - Vendor verification system
     
-- Image upload (Cloudinary / S3)
+- Image upload & profile edit feature
     
 - Advanced filtering & recommendations
     
 - Notification system (Email/SMS)
     
-- Admin dashboard
+- Admin dashboard with analytics
     
 - Review & rating system
 
@@ -256,12 +331,12 @@ A Postman collection will be provided for testing authentication APIs. Import it
 
 - Ravi Dhakad – GitHub: https://github.com/RaviD98  | LinkedIn: https://www.linkedin.com/in/ravidhakad98/
     
-- Abhishek SP 
+- Abhishek SP - GitHub: https://github.com/abhishekSingh930  | LinkedIn: https://www.linkedin.com/in/abhisheks930/
     
-- Sumit
-    
+- Sumit - GitHub: https://github.com/Sumit-Goyal35  | https://www.linkedin.com/in/sumit-goyal-/
 
 ---
+
 
 ## License
 

@@ -3,7 +3,11 @@ import {
   verifyWebhookSignatureService,
 } from "../services/payment.service.js";
 
-import { updateOrderPaymentStatusService, createOrderService } from "../services/order.service.js";
+import {
+  updateOrderPaymentStatusService,
+  createOrderService,
+  createDirectOrderService,
+} from "../services/order.service.js";
 
 import { updateBookingPaymentStatusService } from "../services/booking.service.js";
 
@@ -57,6 +61,7 @@ export const stripeWebhookController = async (req, res) => {
     const session = event.data.object;
 
     const metadata = session.metadata;
+    console.log(metadata);
 
     try {
       // =========================
@@ -65,24 +70,17 @@ export const stripeWebhookController = async (req, res) => {
       if (metadata.type === "order") {
         let order = null;
 
-        // If pending order already exists
-        if (
-          metadata.resourceId &&
-          metadata.resourceId !== "pending"
-        ) {
-          order =
-            await updateOrderPaymentStatusService(
-              metadata.resourceId,
-              {
-                paymentStatus: "Paid",
-                status: "Confirmed",
-              },
-            );
+        // Existing pending order
+        if (metadata.resourceId && metadata.resourceId !== "pending") {
+          order = await updateOrderPaymentStatusService(metadata.resourceId, {
+            paymentStatus: "Paid",
+            status: "Pending",
+          });
         }
 
-        // If order does NOT exist -> create it
+        // Direct buy order
         else {
-          order = await createOrderService({
+          order = await createDirectOrderService({
             user: metadata.userId,
 
             items: JSON.parse(metadata.items),
@@ -91,18 +89,16 @@ export const stripeWebhookController = async (req, res) => {
 
             paymentStatus: "Paid",
 
-            status: "Confirmed",
+            status: "Pending",
           });
         }
 
-        // Auto delivery creation
+        // Delivery
         if (order) {
           await createDeliveryService(order.user, {
             orderId: order._id,
 
-            address:
-              metadata.address ||
-              "Default Address",
+            address: metadata.address || "Default Address",
 
             deliveryCharge: 0,
           });
@@ -113,28 +109,23 @@ export const stripeWebhookController = async (req, res) => {
       // BOOKING PAYMENT
       // =========================
       if (metadata.type === "booking") {
-        const updatedBooking =
-          await updateBookingPaymentStatusService(
-            metadata.resourceId,
-            {
-              paymentStatus: "paid",
-              bookingStatus: "confirmed",
-            },
-          );
+        const updatedBooking = await updateBookingPaymentStatusService(
+          metadata.resourceId,
+          {
+            paymentStatus: "paid",
+            bookingStatus: "confirmed",
+          },
+        );
 
         // Auto-create delivery
         if (updatedBooking?.deliveryRequired) {
-          await createDeliveryService(
-            updatedBooking.user,
-            {
-              bookingId: updatedBooking._id,
+          await createDeliveryService(updatedBooking.user, {
+            bookingId: updatedBooking._id,
 
-              address:
-                updatedBooking.deliveryAddress,
+            address: updatedBooking.deliveryAddress,
 
-              deliveryCharge: 0,
-            },
-          );
+            deliveryCharge: 0,
+          });
         }
       }
 

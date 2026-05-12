@@ -13,6 +13,7 @@ import { ApiError } from "../utils/ApiError.js";
 
 // Create order from cart
 export const createOrderService = async (userId) => {
+  console.log("createOrder called");
   // Get cart
   const cart = await findCartByUserId(userId);
 
@@ -48,6 +49,22 @@ export const createOrderService = async (userId) => {
   await clearCartByUserId(userId);
 
   return order;
+};
+
+export const createDirectOrderService = async ({
+  user,
+  items,
+  totalAmount,
+  paymentStatus,
+  status,
+}) => {
+  return await createOrder({
+    user,
+    items,
+    totalAmount,
+    paymentStatus,
+    status,
+  });
 };
 
 // Get user orders
