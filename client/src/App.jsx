@@ -35,54 +35,11 @@ const router = createBrowserRouter(
       {/* public / index */}
       <Route index element={<Home />} />
       {/* protected pages */}
-      <Route
-        path="products/category/:category"
-        element={
-          <ProtectedRoute>
-            <CategoryPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="products/item/:productId"
-        element={
-          <ProtectedRoute>
-            <ItemDetails />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="products"
-        element={
-          <ProtectedRoute>
-            <Products />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/add-product"
-        element={
-          <VendorRoute>
-            <AddProduct />
-          </VendorRoute>
-        }
-      />
-      <Route
-        path="about"
-        element={
-          <ProtectedRoute>
-            <About />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="contact"
-        element={
-          <ProtectedRoute>
-            <Contact />
-          </ProtectedRoute>
-        }
-      />{" "}
+      <Route path="products" element={<Products />} />
+      <Route path="products/category/:category" element={<CategoryPage />} />
+      <Route path="products/item/:productId" element={<ItemDetails />} />
+      <Route path="about" element={<About />} />
+      <Route path="contact" element={<Contact />} />{" "}
       <Route
         path="cart"
         element={
@@ -104,6 +61,14 @@ const router = createBrowserRouter(
         element={
           <VendorRoute>
             <VendorDashboard />
+          </VendorRoute>
+        }
+      />
+      <Route
+        path="/add-product"
+        element={
+          <VendorRoute>
+            <AddProduct />
           </VendorRoute>
         }
       />

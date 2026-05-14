@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 
+import { useSelector } from "react-redux";
+
 import {
   Heart,
   ShoppingCart,
@@ -59,6 +61,8 @@ const ItemDetails = () => {
 
   const favourites = favouritesData?.data?.products || [];
 
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   const isFavourite = favourites.some(
     (fav) => fav._id?.toString() === product?._id?.toString(),
   );
@@ -82,7 +86,28 @@ const ItemDetails = () => {
   }
 
   // Add to cart
+  // const handleAddToCart = async () => {
+  //   try {
+  //     setAdding(true);
+
+  //     await addToCart({
+  //       productId: product._id,
+  //       quantity: 1,
+  //     }).unwrap();
+
+  //     toast.success("Added to cart");
+  //   } catch (error) {
+  //     toast.error(error?.data?.message || "Failed to add to cart");
+  //   } finally {
+  //     setAdding(false);
+  //   }
+  // };
+
   const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      return toast.error("Please login to add items to cart");
+    }
+
     try {
       setAdding(true);
 
@@ -100,7 +125,23 @@ const ItemDetails = () => {
   };
 
   // Favourite
+  // const handleFavourite = async () => {
+  //   try {
+  //     await toggleFavourite(product._id).unwrap();
+
+  //     toast.success(
+  //       isFavourite ? "Removed from favourites" : "Added to favourites",
+  //     );
+  //   } catch (error) {
+  //     toast.error(error?.data?.message || "Failed to update favourite");
+  //   }
+  // };
+
   const handleFavourite = async () => {
+    if (!isAuthenticated) {
+      return toast.error("Please login to use favourites");
+    }
+
     try {
       await toggleFavourite(product._id).unwrap();
 
@@ -114,6 +155,9 @@ const ItemDetails = () => {
 
   // Booking
   const handleBooking = async () => {
+    if (!isAuthenticated) {
+      return toast.error("Please login to create booking");
+    }
     try {
       if (!startTime || !endTime) {
         return toast.error("Please select booking time");
@@ -549,13 +593,17 @@ const ItemDetails = () => {
           {/* Buy */}
           {product.type !== "rent" && (
             <button
-              onClick={() =>
+              onClick={() => {
+                if (!isAuthenticated) {
+                  return toast.error("Please login to continue");
+                }
+
                 navigate("/payment", {
                   state: {
                     product,
                   },
-                })
-              }
+                });
+              }}
               className="
                 cursor-pointer rounded-2xl
                 border border-[#007200]
